@@ -1,5 +1,6 @@
 name: twilio_programmable_chat_example
 description: Demonstrates how to use the twilio_programmable_chat plugin.
+version: 1.0.0
 publish_to: 'none'
 
 environment:
