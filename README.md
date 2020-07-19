@@ -47,6 +47,19 @@ void init() async {
 }
 ```
 
+### Creating a channel
+Before you are able to send messages, you need a Channel to send them in. 
+```dart
+var channel = await _chatClient.channels.createChannel('friendlyName', ChannelType.PUBLIC);
+```
+
+### Joining a a channel
+Once you have created a channel, a user can join that channel to receive or send messages.
+```dart
+var channel = await _chatClient.channels.getChannel('channelSidOrUniqueName');
+await channel.join();
+```
+
 You **must** pass the [Access Token](https://gitlab.com/twilio-flutter/programmable-video/-/tree/master/programmable_video/README.md#access-tokens) when connecting to a Room.
 
 ## Enable debug logging
