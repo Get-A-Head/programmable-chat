@@ -18,7 +18,7 @@ Read the [Frequently Asked Questions](https://gitlab.com/twilio-flutter/programm
 * iOS
 * ~~Web~~ (not yet)
 
-# Initializing Chat Client
+### Initializing Chat Client
 Call `TwilioProgrammableChat.create()` in your Flutter application to create a `ChatClient`. Once synchronized, you can start joining channels and sending messages.
 ```dart
 ChatClient _chatClient;
