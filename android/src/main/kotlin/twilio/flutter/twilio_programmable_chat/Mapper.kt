@@ -131,7 +131,7 @@ object Mapper {
                     channel.addListener(TwilioProgrammableChatPlugin.channelListeners[channel.sid])
                 }
 
-                override fun onCancel(arguments: Any) {
+                override fun onCancel(arguments: Any?) {
                     TwilioProgrammableChatPlugin.debug("Mapper.channelToMap => EventChannel for Channel(${channel.sid}) detached")
                     channel.removeListener(TwilioProgrammableChatPlugin.channelListeners[channel.sid])
                     TwilioProgrammableChatPlugin.channelListeners.remove(channel.sid)

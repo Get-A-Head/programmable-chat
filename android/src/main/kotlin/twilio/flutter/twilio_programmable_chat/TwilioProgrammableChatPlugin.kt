@@ -81,7 +81,7 @@ class TwilioProgrammableChatPlugin : FlutterPlugin {
                 chatListener.chatClient?.setListener(chatListener)
             }
 
-            override fun onCancel(arguments: Any) {
+            override fun onCancel(arguments: Any?) {
                 debug("TwilioProgrammableChatPlugin.onAttachedToEngine => Chat eventChannel detached")
                 chatListener.events = null
             }
@@ -94,7 +94,7 @@ class TwilioProgrammableChatPlugin : FlutterPlugin {
                 mediaProgressSink = events
             }
 
-            override fun onCancel(arguments: Any) {
+            override fun onCancel(arguments: Any?) {
                 debug("TwilioProgrammableChatPlugin.onAttachedToEngine => MediaProgress eventChannel detached")
                 mediaProgressSink = null
             }
@@ -107,7 +107,7 @@ class TwilioProgrammableChatPlugin : FlutterPlugin {
                 loggingSink = events
             }
 
-            override fun onCancel(arguments: Any) {
+            override fun onCancel(arguments: Any?) {
                 debug("TwilioProgrammableChatPlugin.onAttachedToEngine => Logging eventChannel detached")
                 loggingSink = null
             }
@@ -115,7 +115,10 @@ class TwilioProgrammableChatPlugin : FlutterPlugin {
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        debug("TwilioProgrammableChatPlugin.onDetachedFromEngine")
         methodChannel.setMethodCallHandler(null)
         chatChannel.setStreamHandler(null)
+        mediaProgressChannel.setStreamHandler(null)
+        loggingChannel.setStreamHandler(null)
     }
 }

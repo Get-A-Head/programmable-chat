@@ -1,3 +1,8 @@
+## 0.1.0+3
+
+* Makes argument to Android `EventChannel.StreamHandler::onCancel` methods nullable
+* Sets `EventChannel` `StreamHandler`s to `null` on `onDetachedFromEngine`
+
 ## 0.1.0+2
 
 * Throws an `UnsupportedError` when the `TwilioProgrammableChat.create` is called again without first shutting down the existing `ChatClient`
