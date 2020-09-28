@@ -1,3 +1,7 @@
+## 0.1.0+4
+
+* Fixes an issue where null data would prevent events from being parsed and distributed.
+
 ## 0.1.0+3
 
 * Makes argument to Android `EventChannel.StreamHandler::onCancel` methods nullable

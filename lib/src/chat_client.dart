@@ -303,7 +303,7 @@ class ChatClient {
   void _parseEvents(dynamic event) {
     final String eventName = event['name'];
     TwilioProgrammableChat._log("ChatClient => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
-    final data = Map<String, dynamic>.from(event['data']);
+    final data = Map<String, dynamic>.from(event['data'] ?? {});
 
     if (data['chatClient'] != null) {
       final chatClientMap = Map<String, dynamic>.from(data['chatClient']);
