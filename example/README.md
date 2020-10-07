@@ -7,7 +7,7 @@ If you have any question or problems, please join us on [Discord](https://discor
 
 ## Supported platforms
 * Android
-* ~~iOS~~ (not yet)
+* iOS
 * ~~Web~~ (not yet)
 
 ## Prerequisites
