@@ -18,7 +18,7 @@ object MessageMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessageMethods.getChannel => onSuccess")
                 result.success(Mapper.channelToMap(channel))
@@ -41,7 +41,7 @@ object MessageMethods {
         val body = call.argument<String>("body")
                 ?: return result.error("ERROR", "Missing 'body'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessageMethods.updateMessageBody (Channels.getChannel) => onSuccess")
 
@@ -87,7 +87,7 @@ object MessageMethods {
         val attributes = call.argument<Map<String, Any>>("attributes")
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("MessageMethods.setAttributes => onSuccess")
 
@@ -148,7 +148,7 @@ object MessageMethods {
             result.success(true)
         } else {
             TwilioProgrammableChatPlugin.debug("Downloading media for message $messageIndex to path: $path")
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("MessageMethods.getMedia => onSuccess")
                     channel.messages.getMessageByIndex(messageIndex, object : CallbackListener<Message>() {

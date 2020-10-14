@@ -11,7 +11,7 @@ object ChatClientMethods {
         val token = call.argument<String>("token")
                 ?: return result.error("ERROR", "Missing 'token'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.updateToken(token, object : StatusListener() {
+        TwilioProgrammableChatPlugin.chatClient?.updateToken(token, object : StatusListener() {
             override fun onSuccess() {
                 TwilioProgrammableChatPlugin.debug("ChatClientMethods.updateToken => onSuccess")
                 result.success(null)
@@ -26,7 +26,7 @@ object ChatClientMethods {
 
     fun shutdown(call: MethodCall, result: MethodChannel.Result) {
         return try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.shutdown()
+            TwilioProgrammableChatPlugin.chatClient?.shutdown()
             result.success(null)
         } catch (err: Exception) {
             result.error("ERROR", err.message, null)

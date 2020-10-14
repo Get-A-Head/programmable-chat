@@ -14,7 +14,7 @@ object MembersMethods {
         val channelSid = call.argument<String>("channelSid")
             ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MembersMethods.getChannel => onSuccess")
                 result.success(Mapper.channelToMap(channel))
@@ -31,7 +31,7 @@ object MembersMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MembersMethods.getMembersList (Channels.getChannel) => onSuccess")
                 val membersListMap = Mapper.membersListToMap(channel.members.membersList)
@@ -52,7 +52,7 @@ object MembersMethods {
         val identity = call.argument<String>("identity")
                 ?: return result.error("ERROR", "Missing 'identity'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MembersMethods.getMember (Channels.getChannel) => onSuccess")
                 val memberMap = Mapper.memberToMap(channel.members.getMember(identity))
@@ -72,7 +72,7 @@ object MembersMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MembersMethods.addByIdentity (Channels.getChannel) => onSuccess")
                 channel.members.addByIdentity(identity, object : StatusListener() {
@@ -101,7 +101,7 @@ object MembersMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MembersMethods.inviteByIdentity (Channels.getChannel) => onSuccess")
                 channel.members.inviteByIdentity(identity, object : StatusListener() {
@@ -130,7 +130,7 @@ object MembersMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MembersMethods.removeByIdentity (Channels.getChannel) => onSuccess")
                 channel.members.removeByIdentity(identity, object : StatusListener() {

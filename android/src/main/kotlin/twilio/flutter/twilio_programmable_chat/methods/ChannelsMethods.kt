@@ -26,7 +26,7 @@ object ChannelsMethods {
         } ?: return result.error("ERROR", "Wrong value for 'channelType'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.createChannel(friendlyName, channelType, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.createChannel(friendlyName, channelType, object : CallbackListener<Channel>() {
                 override fun onSuccess(newChannel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelsMethods.createChannel => onSuccess")
                     result.success(Mapper.channelToMap(newChannel))
@@ -46,7 +46,7 @@ object ChannelsMethods {
         val channelSidOrUniqueName = call.argument<String>("channelSidOrUniqueName")
                 ?: return result.error("ERROR", "Missing 'channelSidOrUniqueName'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSidOrUniqueName, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSidOrUniqueName, object : CallbackListener<Channel>() {
             override fun onSuccess(newChannel: Channel) {
                 TwilioProgrammableChatPlugin.debug("ChannelsMethods.getChannel => onSuccess")
                 result.success(Mapper.channelToMap(newChannel))
@@ -60,7 +60,7 @@ object ChannelsMethods {
     }
 
     fun getPublicChannelsList(call: MethodCall, result: MethodChannel.Result) {
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getPublicChannelsList(object : CallbackListener<Paginator<ChannelDescriptor>>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getPublicChannelsList(object : CallbackListener<Paginator<ChannelDescriptor>>() {
             override fun onSuccess(paginator: Paginator<ChannelDescriptor>) {
                 TwilioProgrammableChatPlugin.debug("ChannelsMethods.getPublicChannelsList => onSuccess")
                 val pageId = PaginatorManager.setPaginator(paginator)
@@ -75,7 +75,7 @@ object ChannelsMethods {
     }
 
     fun getUserChannelsList(call: MethodCall, result: MethodChannel.Result) {
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getUserChannelsList(object : CallbackListener<Paginator<ChannelDescriptor>>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getUserChannelsList(object : CallbackListener<Paginator<ChannelDescriptor>>() {
             override fun onSuccess(paginator: Paginator<ChannelDescriptor>) {
                 TwilioProgrammableChatPlugin.debug("ChannelsMethods.getUserChannelsList => onSuccess")
                 val pageId = PaginatorManager.setPaginator(paginator)
@@ -93,7 +93,7 @@ object ChannelsMethods {
         val identity = call.argument<String>("identity")
                 ?: return result.error("ERROR", "Missing 'identity'", null)
 
-        val memberList = TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getMembersByIdentity(identity)
+        val memberList = TwilioProgrammableChatPlugin.chatClient?.channels?.getMembersByIdentity(identity)
         val membersListMap = memberList?.map { Mapper.memberToMap(it) }
         result.success(membersListMap)
     }

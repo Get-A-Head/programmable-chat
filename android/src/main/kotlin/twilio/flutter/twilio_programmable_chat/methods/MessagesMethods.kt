@@ -64,7 +64,7 @@ object MessagesMethods {
             }
         }
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.sendMessage (Channels.getChannel) => onSuccess")
 
@@ -94,7 +94,7 @@ object MessagesMethods {
         val messageIndex = call.argument<Long>("messageIndex")
                 ?: return result.error("ERROR", "Missing 'messageIndex'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.removeMessage (Channels.getChannel) => onSuccess")
 
@@ -137,7 +137,7 @@ object MessagesMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.getMessagesBefore (Channels.getChannel) => onSuccess")
 
@@ -170,7 +170,7 @@ object MessagesMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.getMessagesAfter (Channels.getChannel) => onSuccess")
 
@@ -201,7 +201,7 @@ object MessagesMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.getLastMessages (Channels.getChannel) => onSuccess")
 
@@ -232,7 +232,7 @@ object MessagesMethods {
         val messageIndex = call.argument<Long>("messageIndex")
                 ?: return result.error("ERROR", "Missing 'messageIndex'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.getMessageByIndex (Channels.getChannel) => onSuccess")
 
@@ -262,7 +262,7 @@ object MessagesMethods {
         val lastConsumedMessageIndex = call.argument<Int>("lastConsumedMessageIndex")?.toLong()
                 ?: return result.error("ERROR", "Missing 'lastConsumedMessageIndex'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.setLastConsumedMessageIndexWithResult (Channels.getChannel) => onSuccess")
 
@@ -292,7 +292,7 @@ object MessagesMethods {
         val lastConsumedMessageIndex = call.argument<Long>("lastConsumedMessageIndex")
                 ?: return result.error("ERROR", "Missing 'lastConsumedMessageIndex'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.advanceLastConsumedMessageIndexWithResult (Channels.getChannel) => onSuccess")
 
@@ -320,7 +320,7 @@ object MessagesMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.setAllMessagesConsumedWithResult (Channels.getChannel) => onSuccess")
 
@@ -348,7 +348,7 @@ object MessagesMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MessagesMethods.setNoMessagesConsumedWithResult (Channels.getChannel) => onSuccess")
 

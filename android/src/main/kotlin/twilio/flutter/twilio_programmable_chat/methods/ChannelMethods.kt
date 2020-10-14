@@ -16,7 +16,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.join => onSuccess")
                     channel.join(object : StatusListener() {
@@ -47,7 +47,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.leave => onSuccess")
                     channel.leave(object : StatusListener() {
@@ -78,7 +78,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.typing => onSuccess")
                     channel.typing()
@@ -100,7 +100,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.declineInvitation => onSuccess")
                     channel.declineInvitation(object : StatusListener() {
@@ -131,7 +131,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.destroy => onSuccess")
                     channel.destroy(object : StatusListener() {
@@ -162,7 +162,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.getMessagesCount => onSuccess")
                     channel.getMessagesCount(object : CallbackListener<Long>() {
@@ -193,7 +193,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.getUnconsumedMessagesCount => onSuccess")
                     channel.getUnconsumedMessagesCount(object : CallbackListener<Long>() {
@@ -224,7 +224,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.getMembersCount => onSuccess")
                     channel.getMembersCount(object : CallbackListener<Long>() {
@@ -258,7 +258,7 @@ object ChannelMethods {
         val attributes = call.argument<Map<String, Any>>("attributes")
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.setAttributes => onSuccess")
                     channel.setAttributes(Mapper.mapToAttributes(attributes), object : StatusListener() {
@@ -293,7 +293,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.getFriendlyName => onSuccess")
                     result.success(channel.friendlyName)
@@ -317,7 +317,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'friendlyName'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.setFriendlyName => onSuccess")
                     channel.setFriendlyName(friendlyName, object : StatusListener() {
@@ -348,7 +348,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.getNotificationLevel => onSuccess")
                     result.success(channel.notificationLevel.toString())
@@ -378,7 +378,7 @@ object ChannelMethods {
         } ?: return result.error("ERROR", "Wrong value for 'notificationLevel'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.setNotificationLevel => onSuccess")
                     channel.setNotificationLevel(notificationLevel, object : StatusListener() {
@@ -409,7 +409,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.getUniqueName => onSuccess")
                     result.success(channel.uniqueName)
@@ -433,7 +433,7 @@ object ChannelMethods {
                 ?: return result.error("ERROR", "Missing 'uniqueName'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("ChannelMethods.setUniqueName => onSuccess")
                     channel.setUniqueName(uniqueName, object : StatusListener() {

@@ -1,13 +1,10 @@
 package twilio.flutter.twilio_programmable_chat
 
-import android.app.Activity
 import android.content.Context
 import androidx.annotation.NonNull
 import com.twilio.chat.CallbackListener
 import com.twilio.chat.ChatClient
 import com.twilio.chat.ErrorInfo
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -23,30 +20,14 @@ import twilio.flutter.twilio_programmable_chat.methods.PaginatorMethods
 import twilio.flutter.twilio_programmable_chat.methods.UserMethods
 import twilio.flutter.twilio_programmable_chat.methods.UsersMethods
 
-class PluginHandler(private val applicationContext: Context) : MethodCallHandler, ActivityAware {
-    private var activity: Activity? = null
-
-    override fun onDetachedFromActivityForConfigChanges() {
-        this.activity = null
-    }
-
-    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        this.activity = binding.activity
-    }
-
-    override fun onDetachedFromActivity() {
-        this.activity = null
-    }
-
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        this.activity = binding.activity
-    }
-
+class PluginHandler(private val applicationContext: Context) : MethodCallHandler {
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result) {
         TwilioProgrammableChatPlugin.debug("TwilioProgrammableChatPlugin.onMethodCall => received ${call.method}")
         when (call.method) {
             "debug" -> debug(call, result)
             "create" -> create(call, result)
+            "registerForNotification" -> TwilioProgrammableChatPlugin.instance?.registerForNotification(call, result)
+            "unregisterForNotification" -> TwilioProgrammableChatPlugin.instance?.unregisterForNotification(call, result)
 
             "ChatClient#updateToken" -> ChatClientMethods.updateToken(call, result)
             "ChatClient#shutdown" -> ChatClientMethods.shutdown(call, result)
@@ -134,13 +115,13 @@ class PluginHandler(private val applicationContext: Context) : MethodCallHandler
                 propertiesBuilder.setDeferCertificateTrustToPlatform(propertiesObj["deferCA"] as Boolean)
             }
 
-            TwilioProgrammableChatPlugin.chatListener = ChatListener(token, propertiesBuilder.createProperties())
+            TwilioProgrammableChatPlugin.chatListener = ChatListener(propertiesBuilder.createProperties())
 
-            ChatClient.create(applicationContext, TwilioProgrammableChatPlugin.chatListener.token, TwilioProgrammableChatPlugin.chatListener.properties, object : CallbackListener<ChatClient>() {
+            ChatClient.create(applicationContext, token, TwilioProgrammableChatPlugin.chatListener.properties, object : CallbackListener<ChatClient>() {
                 override fun onSuccess(chatClient: ChatClient) {
                     chatClient.users.myUser
                     TwilioProgrammableChatPlugin.debug("TwilioProgrammableChatPlugin.create => ChatClient.create onSuccess: myIdentity is '${chatClient.myIdentity}'")
-                    TwilioProgrammableChatPlugin.chatListener.chatClient = chatClient
+                    TwilioProgrammableChatPlugin.chatClient = chatClient
                     result.success(Mapper.chatClientToMap(chatClient))
                 }
 

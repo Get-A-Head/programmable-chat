@@ -44,7 +44,10 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        await widget.chatBloc.chatClient.shutdown();
+        return true;
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text('Chat'),
@@ -52,7 +55,15 @@ class _ChatPageState extends State<ChatPage> {
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () => widget.chatBloc.retrieve(),
-            )
+            ),
+            IconButton(
+              icon: Icon(Icons.cloud),
+              onPressed: () => widget.chatBloc.registerForNotifications(),
+            ),
+            IconButton(
+              icon: Icon(Icons.cloud_off),
+              onPressed: () => widget.chatBloc.unregisterForNotifications(),
+            ),
           ],
         ),
         body: _channelList(),
@@ -150,7 +161,11 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildChannelIndicator(ChannelStatus status) {
     return Icon(
       status == ChannelStatus.JOINED ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-      color: status != ChannelStatus.JOINED ? status == ChannelStatus.INVITED ? Colors.yellow : Colors.grey : Colors.green,
+      color: status != ChannelStatus.JOINED
+          ? status == ChannelStatus.INVITED
+              ? Colors.yellow
+              : Colors.grey
+          : Colors.green,
     );
   }
 

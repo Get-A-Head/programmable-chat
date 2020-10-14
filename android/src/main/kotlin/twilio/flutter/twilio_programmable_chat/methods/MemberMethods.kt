@@ -17,7 +17,7 @@ object MemberMethods {
         val channelSid = call.argument<String>("channelSid")
             ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+        TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
             override fun onSuccess(channel: Channel) {
                 TwilioProgrammableChatPlugin.debug("MemberMethods.getChannel => onSuccess")
                 result.success(Mapper.channelToMap(channel))
@@ -38,7 +38,7 @@ object MemberMethods {
                 ?: return result.error("ERROR", "Missing 'identity'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("MemberMethods.getUserDescriptor => onSuccess")
                     val member = channel.members.membersList.find { it.identity == identity }
@@ -77,7 +77,7 @@ object MemberMethods {
                 ?: return result.error("ERROR", "Missing 'memberSid'", null)
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("MemberMethods.getAndSubscribeUser => onSuccess")
                     val member = channel.members.membersList.find { it.sid == memberSid }
@@ -119,7 +119,7 @@ object MemberMethods {
         val attributes = call.argument<Map<String, Any>>("attributes")
 
         try {
-            TwilioProgrammableChatPlugin.chatListener.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
+            TwilioProgrammableChatPlugin.chatClient?.channels?.getChannel(channelSid, object : CallbackListener<Channel>() {
                 override fun onSuccess(channel: Channel) {
                     TwilioProgrammableChatPlugin.debug("MemberMethods.setAttributes => onSuccess")
                     val member = channel.members.membersList.find { it.sid == memberSid }

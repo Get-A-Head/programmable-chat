@@ -10,6 +10,8 @@ class TwilioProgrammableChat {
 
   static const EventChannel _loggingChannel = EventChannel('twilio_programmable_chat/logging');
 
+  static const EventChannel _notificationChannel = EventChannel('twilio_programmable_chat/notification');
+
   static StreamSubscription _loggingStream;
 
   static bool _dartDebug = false;

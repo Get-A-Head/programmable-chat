@@ -60,7 +60,7 @@ public class ChatListener: NSObject, TwilioChatClientDelegate {
     // onClientSynchronizationUpdated
     public func chatClient(_ client: TwilioChatClient, synchronizationStatusUpdated status: TCHClientSynchronizationStatus) {
         SwiftTwilioProgrammableChatPlugin.debug("ChatListener.onClientSynchronization => state is \(Mapper.clientSynchronizationStatusToString(status))")
-        sendEvent("connectionStateChange", data: ["synchronizationStatus": Mapper.clientSynchronizationStatusToString(status)])
+        sendEvent("clientSynchronization", data: ["synchronizationStatus": Mapper.clientSynchronizationStatusToString(status)])
     }
 
     // onConnectionStateChange
@@ -135,8 +135,8 @@ public class ChatListener: NSObject, TwilioChatClientDelegate {
     // onUserUpdated
     public func chatClient(_ client: TwilioChatClient, user: TCHUser, updated: TCHUserUpdate) {
         SwiftTwilioProgrammableChatPlugin.debug("ChatListener.onUserUpdated => user \(String(describing: user.identity)) updated, \(Mapper.userUpdateToString(updated))")
-        sendEvent("channelUpdated", data: [
-            "channel": Mapper.userToDict(user) as Any,
+        sendEvent("userUpdated", data: [
+            "user": Mapper.userToDict(user) as Any,
             "reason": [
                 "type": "user",
                 "value": Mapper.userUpdateToString(updated)

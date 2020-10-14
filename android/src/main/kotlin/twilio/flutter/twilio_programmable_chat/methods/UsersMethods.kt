@@ -16,7 +16,7 @@ object UsersMethods {
         val channelSid = call.argument<String>("channelSid")
                 ?: return result.error("ERROR", "Missing 'channelSid'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.users?.getChannelUserDescriptors(channelSid, object : CallbackListener<Paginator<UserDescriptor>>() {
+        TwilioProgrammableChatPlugin.chatClient?.users?.getChannelUserDescriptors(channelSid, object : CallbackListener<Paginator<UserDescriptor>>() {
             override fun onSuccess(paginator: Paginator<UserDescriptor>) {
                 TwilioProgrammableChatPlugin.debug("UsersMethods.getChannelUserDescriptors => onSuccess")
                 val pageId = PaginatorManager.setPaginator(paginator)
@@ -34,7 +34,7 @@ object UsersMethods {
         val identity = call.argument<String>("identity")
                 ?: return result.error("ERROR", "Missing 'identity'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.users?.getUserDescriptor(identity, object : CallbackListener<UserDescriptor>() {
+        TwilioProgrammableChatPlugin.chatClient?.users?.getUserDescriptor(identity, object : CallbackListener<UserDescriptor>() {
             override fun onSuccess(userDescriptor: UserDescriptor) {
                 TwilioProgrammableChatPlugin.debug("UsersMethods.getUserDescriptor => onSuccess")
                 result.success(Mapper.userDescriptorToMap(userDescriptor))
@@ -51,7 +51,7 @@ object UsersMethods {
         val identity = call.argument<String>("identity")
                 ?: return result.error("ERROR", "Missing 'identity'", null)
 
-        TwilioProgrammableChatPlugin.chatListener.chatClient?.users?.getAndSubscribeUser(identity, object : CallbackListener<User>() {
+        TwilioProgrammableChatPlugin.chatClient?.users?.getAndSubscribeUser(identity, object : CallbackListener<User>() {
             override fun onSuccess(user: User) {
                 TwilioProgrammableChatPlugin.debug("UsersMethods.getAndSubscribeUser => onSuccess")
                 result.success(Mapper.userToMap(user))

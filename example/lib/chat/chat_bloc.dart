@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
@@ -32,6 +34,15 @@ class ChatBloc {
     }));
     _subscriptions.add(chatClient.onChannelInvited.listen((event) {
       retrieve();
+    }));
+    _subscriptions.add(chatClient.onNotificationRegistered.listen((event) {
+      // Do things
+    }));
+    _subscriptions.add(chatClient.onNotificationDeregistered.listen((event) {
+      // Do things
+    }));
+    _subscriptions.add(chatClient.onNotificationFailed.listen((event) {
+      // Do things
     }));
   }
 
@@ -89,6 +100,22 @@ class ChatBloc {
       }));
     }
     _channelDescriptorController.add(ChatModel(publicChannels: publicChannelPaginator.items, userChannels: userChannelPaginator.items));
+  }
+
+  Future registerForNotifications() async {
+    var token;
+    if (Platform.isAndroid) {
+      token = await FirebaseMessaging().getToken();
+    }
+    await chatClient.registerForNotification(token);
+  }
+
+  Future unregisterForNotifications() async {
+    var token;
+    if (Platform.isAndroid) {
+      token = await FirebaseMessaging().getToken();
+    }
+    await chatClient.unregisterForNotification(token);
   }
 
   Future _updateUnreadMessageCountForChannel(ChannelDescriptor channelDescriptor) async {

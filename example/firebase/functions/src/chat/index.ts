@@ -1,1 +1,1 @@
-export {createToken as createToken}                 from './createToken';
+export {createToken as createToken} from './createToken';

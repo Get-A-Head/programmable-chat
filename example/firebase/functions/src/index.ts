@@ -15,6 +15,8 @@ process.env.TWILIO_ACCOUNT_SID = functions.config().twilio.live.account_sid;
 process.env.TWILIO_API_KEY = functions.config().twilio.api_key;
 process.env.TWILIO_API_SECRET = functions.config().twilio.api_secret;
 process.env.TWILIO_SERVICE_SID = functions.config().twilio.service_sid;
+process.env.APN_CREDENTIAL_SID = functions.config().twilio.apn_credential_sid;
+process.env.FCM_CREDENTIAL_SID = functions.config().twilio.fcm_credential_sid;
 
 const region = functions.region('europe-west1');
 const runtimeOptions: RuntimeOptions = {timeoutSeconds: 10, memory: '128MB'};

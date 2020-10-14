@@ -10,7 +10,7 @@ object UserMethods {
                 ?: return result.error("ERROR", "Missing 'identity'", null)
 
         try {
-            val subscribedUser = TwilioProgrammableChatPlugin.chatListener.chatClient?.users?.subscribedUsers?.find { it.identity == identity }
+            val subscribedUser = TwilioProgrammableChatPlugin.chatClient?.users?.subscribedUsers?.find { it.identity == identity }
 
             if (subscribedUser != null) {
                 subscribedUser.unsubscribe()

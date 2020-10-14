@@ -1,3 +1,10 @@
+## 0.1.1
+
+* Added registration for Twilio push notifications via APNs on iOS.
+* Added registration for Twilio push notifications via FCM on Android.
+* Fixed handling of `userUpdated` event.
+* Fixed `clientSynchronization` event broadcast for iOS.
+
 ## 0.1.0+4
 
 * Fixes an issue where null data would prevent events from being parsed and distributed.

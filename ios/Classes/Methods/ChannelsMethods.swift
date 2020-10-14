@@ -20,7 +20,7 @@ public class ChannelsMethods {
             return result(FlutterError(code: "MISSING_PARAMS", message: "Could no parse 'channelType' parameter", details: nil))
         }
 
-        let channelOptions: [String: Any?] = [
+        let channelOptions: [String: Any] = [
             TCHChannelOptionFriendlyName: friendlyName,
             TCHChannelOptionType: channelType.rawValue
         ]

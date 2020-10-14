@@ -33,16 +33,22 @@ class NewMessageNotificationEvent {
         assert(messageSid != null),
         assert(messageIndex != null);
 }
-//#endregion
 
-//#region Enum
-enum PushNotificationPlatform { FCM, GCM, APNS }
+class NotificationRegistrationEvent {
+  final bool isSuccessful;
+  final ErrorInfo error;
+
+  NotificationRegistrationEvent(this.isSuccessful, this.error);
+}
 //#endregion
 
 /// Chat client - main entry point for the Chat SDK.
 class ChatClient {
   /// Stream for the native chat events.
   StreamSubscription<dynamic> _chatStream;
+
+  /// Stream for the notification events.
+  StreamSubscription<dynamic> _notificationStream;
 
   //#region Private API properties
   Channels _channels;
@@ -194,6 +200,16 @@ class ChatClient {
 
   /// Called when user info is updated for currently loaded users.
   Stream<UserUpdatedEvent> onUserUpdated;
+
+  final StreamController<NotificationRegistrationEvent> _onNotificationRegisteredCtrl = StreamController<NotificationRegistrationEvent>.broadcast();
+
+  /// Called when attempt to register device for notifications has completed.
+  Stream<NotificationRegistrationEvent> onNotificationRegistered;
+
+  final StreamController<NotificationRegistrationEvent> _onNotificationDeregisteredCtrl = StreamController<NotificationRegistrationEvent>.broadcast();
+
+  /// Called when attempt to register device for notifications has completed.
+  Stream<NotificationRegistrationEvent> onNotificationDeregistered;
   //#endregion
 
   ChatClient(this._myIdentity) : assert(_myIdentity != null) {
@@ -216,8 +232,12 @@ class ChatClient {
     onUserSubscribed = _onUserSubscribedCtrl.stream;
     onUserUnsubscribed = _onUserUnsubscribedCtrl.stream;
     onUserUpdated = _onUserUpdatedCtrl.stream;
+    onNotificationRegistered = _onNotificationRegisteredCtrl.stream;
+    onNotificationDeregistered = _onNotificationDeregisteredCtrl.stream;
+    onNotificationFailed = _onNotificationFailedCtrl.stream;
 
     _chatStream = TwilioProgrammableChat._chatChannel.receiveBroadcastStream(0).listen(_parseEvents);
+    _notificationStream = TwilioProgrammableChat._notificationChannel.receiveBroadcastStream(0).listen(_parseNotificationEvents);
   }
 
   /// Construct from a map.
@@ -243,42 +263,38 @@ class ChatClient {
   Future<void> shutdown() async {
     try {
       await _chatStream.cancel();
+      await _notificationStream.cancel();
       TwilioProgrammableChat.chatClient = null;
       return await TwilioProgrammableChat._methodChannel.invokeMethod('ChatClient#shutdown', null);
     } on PlatformException catch (err) {
       throw TwilioProgrammableChat._convertException(err);
     }
   }
-//
-//  /// Registers for push notifications. Supported push notification platform(s) vary based on host OS
-//  Future<void> registerForNotification(String token, PushNotificationPlatform platform) async {
-////    assert(token != null, token.isNotEmpty);
-//    assert(platform != null);
-//
-//    try {
-//      await TwilioProgrammableChat._methodChannel.invokeMethod('ChatClient#registerForNotification', <String, String>{
-////        'token': token,
-//        'platform': EnumToString.parse(platform),
-//      });
-//    } on PlatformException catch (err) {
-//      throw TwilioProgrammableChat._convertException(err);
-//    }
-//  }
-//
-//  /// Unregisters for push notifications. Supported push notification platform(s) vary based on host OS
-//  Future<void> unregisterForNotification(String token, PushNotificationPlatform platform) async {
-////    assert(token != null, token.isNotEmpty);
-//    assert(platform != null);
-//
-//    try {
-//      await TwilioProgrammableChat._methodChannel.invokeMethod('ChatClient#unregisterForNotification', <String, String>{
-////        'token': token,
-//        'platform': EnumToString.parse(platform),
-//      });
-//    } on PlatformException catch (err) {
-//      throw TwilioProgrammableChat._convertException(err);
-//    }
-//  }
+
+  /// Registers for push notifications. Uses APNs on iOS and FCM on Android.
+  ///
+  /// Token is only used on Android. iOS implementation retrieves APNs token itself.
+  ///
+  /// Twilio iOS SDK handles receiving messages when app is in the background and displaying
+  /// notifications.
+  Future<void> registerForNotification(String token) async {
+    try {
+      await TwilioProgrammableChat._methodChannel.invokeMethod('registerForNotification', <String, Object>{'token': token});
+    } on PlatformException catch (err) {
+      throw TwilioProgrammableChat._convertException(err);
+    }
+  }
+
+  /// Unregisters for push notifications.  Uses APNs on iOS and FCM on Android.
+  ///
+  /// Token is only used on Android. iOS implementation retrieves APNs token itself.
+  Future<void> unregisterForNotification(String token) async {
+    try {
+      await TwilioProgrammableChat._methodChannel.invokeMethod('unregisterForNotification', <String, Object>{'token': token});
+    } on PlatformException catch (err) {
+      throw TwilioProgrammableChat._convertException(err);
+    }
+  }
   //#endregion
 
   /// Update properties from a map.
@@ -331,7 +347,11 @@ class ChatClient {
     dynamic reason;
     if (data['reason'] != null) {
       final reasonMap = Map<String, dynamic>.from(data['reason'] as Map<dynamic, dynamic>);
-      reason = EnumToString.fromString(ChannelUpdateReason.values, reasonMap['value']);
+      if (reasonMap['type'] == 'channel') {
+        reason = EnumToString.fromString(ChannelUpdateReason.values, reasonMap['value']);
+      } else if (reasonMap['type'] == 'user') {
+        reason = EnumToString.fromString(UserUpdateReason.values, reasonMap['value']);
+      }
     }
 
     switch (eventName) {
@@ -433,11 +453,38 @@ class ChatClient {
       case 'userUpdated':
         assert(userMap != null);
         assert(reason != null);
-        users._updateFromMap({'subscribedUsers': userMap});
+        users._updateFromMap({
+          'subscribedUsers': [userMap]
+        });
         _onUserUpdatedCtrl.add(UserUpdatedEvent(users.getUserById(userMap['identity']), reason));
         break;
       default:
         TwilioProgrammableChat._log("Event '$eventName' not yet implemented");
+        break;
+    }
+  }
+
+  /// Parse native chat client events to the right event streams.
+  void _parseNotificationEvents(dynamic event) {
+    final String eventName = event['name'];
+    TwilioProgrammableChat._log("ChatClient => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
+    final data = Map<String, dynamic>.from(event['data']);
+
+    ErrorInfo exception;
+    if (event['error'] != null) {
+      final errorMap = Map<String, dynamic>.from(event['error'] as Map<dynamic, dynamic>);
+      exception = ErrorInfo(errorMap['code'] as int, errorMap['message'], errorMap['status'] as int);
+    }
+
+    switch (eventName) {
+      case 'registered':
+        _onNotificationRegisteredCtrl.add(NotificationRegistrationEvent(data['result'], exception));
+        break;
+      case 'deregistered':
+        _onNotificationDeregisteredCtrl.add(NotificationRegistrationEvent(data['result'], exception));
+        break;
+      default:
+        TwilioProgrammableChat._log("Notification event '$eventName' not yet implemented");
         break;
     }
   }

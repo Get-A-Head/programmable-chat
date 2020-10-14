@@ -11,14 +11,14 @@ public class PluginHandler {
             debug(call, result: result)
         case "create":
             create(call, result: result)
+        case "registerForNotification":
+            SwiftTwilioProgrammableChatPlugin.instance?.registerForNotification(call, result: result)
+        case "unregisterForNotification":
+            SwiftTwilioProgrammableChatPlugin.instance?.unregisterForNotification(call, result: result)
         case "ChatClient#updateToken":
             ChatClientMethods.updateToken(call, result: result)
         case "ChatClient#shutdown":
             ChatClientMethods.shutdown(call, result: result)
-//        case "ChatClient#registerForNotification":
-//            ChatClientMethods.registerForNotification(call, result: result)
-//        case "ChatClient#unregisterForNotification":
-//            ChatClientMethods.unregisterForNotification(call, result: result)
 
         case "User#unsubscribe":
             UserMethods.unsubscribe(call, result: result)

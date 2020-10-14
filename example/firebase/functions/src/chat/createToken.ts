@@ -34,7 +34,10 @@ export const createToken = async (data: any, context: CallableContext) => {
         );
 
         // Grant the access token Twilio Chat capabilities
-        token.addGrant(new AccessToken.ChatGrant({ serviceSid: process.env.TWILIO_SERVICE_SID }));
+        token.addGrant(new AccessToken.ChatGrant({
+            serviceSid: process.env.TWILIO_SERVICE_SID,
+            pushCredentialSid: data.platform == "IOS" ? process.env.APN_CREDENTIAL_SID : process.env.FCM_CREDENTIAL_SID,
+         }));
 
         console.log(`Identity ${data.identity} requested a token for chat`);
 

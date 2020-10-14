@@ -9,10 +9,8 @@ import io.flutter.plugin.common.EventChannel
 import twilio.flutter.twilio_programmable_chat.Mapper
 import twilio.flutter.twilio_programmable_chat.TwilioProgrammableChatPlugin
 
-class ChatListener(val token: String, val properties: ChatClient.Properties) : ChatClientListener {
+class ChatListener(val properties: ChatClient.Properties) : ChatClientListener {
     var events: EventChannel.EventSink? = null
-
-    var chatClient: ChatClient? = null
 
     override fun onAddedToChannelNotification(channelSid: String) {
         TwilioProgrammableChatPlugin.debug("ChatListener.onAddedToChannelNotification => channelSid = $channelSid")
