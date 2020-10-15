@@ -1,3 +1,7 @@
+## 0.1.1+1
+
+* Updated `enum_to_string` usage to improve pub score
+
 ## 0.1.1
 
 * Added registration for Twilio push notifications via APNs on iOS.

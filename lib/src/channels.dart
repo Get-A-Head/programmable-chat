@@ -29,7 +29,7 @@ class Channels {
   Future<Channel> createChannel(String friendlyName, ChannelType channelType) async {
     assert(channelType != null);
     try {
-      final methodData = await TwilioProgrammableChat._methodChannel.invokeMethod('Channels#createChannel', <String, Object>{'friendlyName': friendlyName, 'channelType': EnumToString.parse(channelType)});
+      final methodData = await TwilioProgrammableChat._methodChannel.invokeMethod('Channels#createChannel', <String, Object>{'friendlyName': friendlyName, 'channelType': EnumToString.convertToString(channelType)});
       final channelMap = Map<String, dynamic>.from(methodData);
       _updateChannelFromMap(channelMap);
       return _channelsMap[channelMap['sid']];

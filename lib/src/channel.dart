@@ -416,7 +416,7 @@ class Channel {
         NotificationLevel.values,
         await TwilioProgrammableChat._methodChannel.invokeMethod('Channel#setNotificationLevel', {
           'channelSid': _sid,
-          'notificationLevel': EnumToString.parse(notificationLevel),
+          'notificationLevel': EnumToString.convertToString(notificationLevel),
         }),
       );
     } on PlatformException catch (err) {
