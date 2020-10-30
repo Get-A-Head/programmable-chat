@@ -1,3 +1,7 @@
+## 0.1.1+2
+
+* Update previously final properties for `Channel` that are not available at `IDENTIFIER` sync state.
+
 ## 0.1.1+1
 
 * Updated `enum_to_string` usage to improve pub score

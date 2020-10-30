@@ -42,7 +42,7 @@ class Channel {
 
   final ChannelType _type;
 
-  final Attributes _attributes;
+  Attributes _attributes;
 
   Messages _messages;
 
@@ -52,9 +52,9 @@ class Channel {
 
   ChannelSynchronizationStatus _synchronizationStatus;
 
-  final DateTime _dateCreated;
+  DateTime _dateCreated;
 
-  final String _createdBy;
+  String _createdBy;
 
   DateTime _dateUpdated;
 
@@ -459,8 +459,14 @@ class Channel {
       _messages._updateFromMap(messagesMap);
     }
 
+    if (map['attributes'] != null) {
+      _attributes = Attributes.fromMap(map['attributes'].cast<String, dynamic>());
+    }
+
     _status = EnumToString.fromString(ChannelStatus.values, map['status']);
 
+    _createdBy ??= map['createdBy'];
+    _dateCreated ??= map['dateCreated'] != null ? DateTime.parse(map['dateCreated']) : null;
     _dateUpdated = map['dateUpdated'] != null ? DateTime.parse(map['dateUpdated']) : null;
     _lastMessageDate = map['lastMessageDate'] != null ? DateTime.parse(map['lastMessageDate']) : null;
     _lastMessageIndex = map['lastMessageIndex'];
