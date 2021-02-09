@@ -1,3 +1,7 @@
+## 0.1.1+4
+
+* Resolved bug in which Channel event subscriptions failed to receive new events (e.g. `onMessageAdded`) after calling `shutdown` on an existing `ChatClient` and then initializing a new one with `TwilioProgrammableChat.create`
+
 ## 0.1.1+3
 
 * Provided a default value of "" for `message.memberSid` when sending to the Dart layer from Swift.
