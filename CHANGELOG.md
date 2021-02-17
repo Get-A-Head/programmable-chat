@@ -1,3 +1,7 @@
+## 0.1.1+5
+
+* Resolved a bug where `connectionState` could be `null` when network is disabled or changed.
+
 ## 0.1.1+4
 
 * Resolved bug in which Channel event subscriptions failed to receive new events (e.g. `onMessageAdded`) after calling `shutdown` on an existing `ChatClient` and then initializing a new one with `TwilioProgrammableChat.create`
