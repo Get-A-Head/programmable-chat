@@ -1,3 +1,7 @@
+## 0.1.1+7
+
+* **Android**: Fixed type cast error parsing the `messageIndex` param for `getMessageByIndex` at native layer.
+
 ## 0.1.1+6
 
 * Removed native layer Channel `EventChannel` when client is shutdown.
