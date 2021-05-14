@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 /// Represents the various states of the user with respect to the channel.

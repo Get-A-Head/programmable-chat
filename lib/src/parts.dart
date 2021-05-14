@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library twilio_programmable_chat;
 
 import 'dart:async';

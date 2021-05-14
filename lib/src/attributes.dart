@@ -1,20 +1,16 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 class Attributes {
   //#region Private API properties
   final AttributesType _type;
 
-  final String _json;
+  final String? _json;
   //#endregion
 
   /// Returns attributes type
   AttributesType get type => _type;
 
-  Attributes(this._type, this._json)
-      : assert(_type != null),
-        assert(_json != null);
+  Attributes(this._type, this._json) : assert(_json != null);
 
   factory Attributes.fromMap(Map<String, dynamic> map) {
     var type = AttributesType.values.firstWhere((type) {
@@ -24,23 +20,23 @@ class Attributes {
     return Attributes(type, json);
   }
 
-  Map<String, dynamic> getJSONObject() {
+  Map<String, dynamic>? getJSONObject() {
     if (type != AttributesType.OBJECT) {
       return null;
     } else {
-      return jsonDecode(_json);
+      return jsonDecode(_json!);
     }
   }
 
-  List<Map<String, dynamic>> getJSONArray() {
+  List<Map<String, dynamic>>? getJSONArray() {
     if (type != AttributesType.ARRAY) {
       return null;
     } else {
-      return List<Map<String, dynamic>>.from(jsonDecode(_json));
+      return List<Map<String, dynamic>>.from(jsonDecode(_json!));
     }
   }
 
-  String getString() {
+  String? getString() {
     if (type != AttributesType.STRING) {
       return null;
     } else {
@@ -48,15 +44,15 @@ class Attributes {
     }
   }
 
-  num getNumber() {
+  num? getNumber() {
     if (type != AttributesType.NUMBER) {
       return null;
     } else {
-      return num.tryParse(_json);
+      return num.tryParse(_json!);
     }
   }
 
-  bool getBoolean() {
+  bool? getBoolean() {
     if (type != AttributesType.BOOLEAN) {
       return null;
     } else {
