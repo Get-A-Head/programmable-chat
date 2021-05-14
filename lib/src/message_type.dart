@@ -1,3 +1,5 @@
+// @dart=2.9
+
 part of twilio_programmable_chat;
 
 /// Represents the type of message.

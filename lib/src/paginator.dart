@@ -1,3 +1,5 @@
+// @dart=2.9
+
 part of twilio_programmable_chat;
 
 /// Class for paginating over items retrieved using [Channels.getPublicChannelsList], [Channels.getUserChannelsList] or [Users.getChannelUserDescriptors].
