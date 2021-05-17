@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 /// Represents options when connecting to a [ChatClient].
@@ -18,10 +16,8 @@ class Properties {
   //#endregion
 
   Properties({
-    String region,
-  }) {
-    _region = region ?? 'us1';
-  }
+    String? region,
+  }) : _region = region ?? 'us1';
 
   /// Create map from properties.
   Map<String, Object> _toMap() {

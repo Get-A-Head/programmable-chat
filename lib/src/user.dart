@@ -1,25 +1,23 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 class User {
   //#region Private API properties
-  String _friendlyName;
+  String? _friendlyName;
 
-  final Attributes _attributes;
+  final Attributes? _attributes;
 
   final String _identity;
 
-  bool _isOnline;
+  bool? _isOnline;
 
-  bool _isNotifiable;
+  bool? _isNotifiable;
 
-  bool _isSubscribed;
+  bool? _isSubscribed;
   //#endregion
 
   //#region Public API properties
   /// Method that returns the friendlyName from the user info.
-  String get friendlyName {
+  String? get friendlyName {
     return _friendlyName;
   }
 
@@ -30,30 +28,28 @@ class User {
 
   /// Return user's online status, if available,
   // TODO(WLFN): Should probaly be a async method for real time
-  bool get isOnline {
+  bool? get isOnline {
     return _isOnline;
   }
 
   /// Return user's push reachability.
   // TODO(WLFN): Should probaly be a async method for real time
-  bool get isNotifiable {
+  bool? get isNotifiable {
     return _isNotifiable;
   }
 
   /// Check if this user receives real-time status updates.
-  bool get isSubscribed {
+  bool? get isSubscribed {
     return _isSubscribed;
   }
 
   /// Get attributes map
-  Attributes get attributes {
+  Attributes? get attributes {
     return _attributes;
   }
   //#endregion
 
-  User(this._identity, this._attributes)
-      : assert(_identity != null),
-        assert(_attributes != null);
+  User(this._identity, this._attributes);
 
   /// Construct from a map.
   factory User._fromMap(Map<String, dynamic> map) {
