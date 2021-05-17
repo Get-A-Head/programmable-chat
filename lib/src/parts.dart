@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/services.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 part 'attributes.dart';
 part 'channel.dart';

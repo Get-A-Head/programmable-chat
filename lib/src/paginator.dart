@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 /// Class for paginating over items retrieved using [Channels.getPublicChannelsList], [Channels.getUserChannelsList] or [Users.getChannelUserDescriptors].
@@ -9,20 +7,20 @@ part of twilio_programmable_chat;
 /// If all items did not fit into single page [Paginator.hasNextPage] will return true. You could use [Paginator.requestNextPage] to get the next page of results.
 /// If [Paginator.hasNextPage()] returns false, then this is the last page. Calling [Paginator.requestNextPage()] on the last page will throw [PlatformException].
 class Paginator<T> {
-  final Map<String, dynamic> _passOn;
+  final Map<String, dynamic>? _passOn;
 
   final String _itemType;
 
   final String _pageId;
 
-  final List<T> _items = [];
+  final List<T?> _items = [];
 
   final int _pageSize;
 
   final bool _hasNextPage;
 
   /// Get items available in the current page.
-  List<T> get items {
+  List<T?> get items {
     return [..._items];
   }
 
@@ -37,14 +35,10 @@ class Paginator<T> {
     return _hasNextPage;
   }
 
-  Paginator(this._pageId, this._pageSize, this._hasNextPage, this._itemType, this._passOn)
-      : assert(_pageId != null),
-        assert(_pageSize != null),
-        assert(_hasNextPage != null),
-        assert(_itemType != null);
+  Paginator(this._pageId, this._pageSize, this._hasNextPage, this._itemType, this._passOn);
 
   /// Construct from a map.
-  factory Paginator._fromMap(Map<String, dynamic> map, {Map<String, dynamic> passOn}) {
+  factory Paginator._fromMap(Map<String, dynamic> map, {Map<String, dynamic>? passOn}) {
     var paginator = Paginator<T>(map['pageId'], map['pageSize'], map['hasNextPage'], map['itemType'], passOn);
     paginator._updateFromMap(map);
     return paginator;
@@ -72,11 +66,16 @@ class Paginator<T> {
         var item;
         switch (_itemType) {
           case 'userDescriptor':
-            assert(_passOn['users'] != null);
-            item = (_items as List<UserDescriptor>).firstWhere(
-              (c) => c._identity == itemMap['identity'],
-              orElse: () => UserDescriptor._fromMap(itemMap),
-            );
+            var passOn = _passOn;
+            if (passOn == null) {
+              break;
+            }
+            if (passOn['users'] != null) {
+              item = (_items as List<UserDescriptor>).firstWhere(
+                (c) => c._identity == itemMap['identity'],
+                orElse: () => UserDescriptor._fromMap(itemMap),
+              );
+            }
             break;
           case 'channelDescriptor':
             item = (_items as List<ChannelDescriptor>).firstWhere(
@@ -85,11 +84,12 @@ class Paginator<T> {
             );
             break;
         }
-        assert(item != null);
-        if (!_items.contains(item)) {
-          _items.add(item);
+        if (item != null) {
+          if (!_items.contains(item)) {
+            _items.add(item);
+          }
+          item._updateFromMap(itemMap);
         }
-        item._updateFromMap(itemMap);
       }
     }
   }

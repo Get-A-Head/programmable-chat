@@ -1,18 +1,16 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 class MessageMedia {
   //#region Private API properties
   final String _sid;
 
-  final String _fileName;
+  final String? _fileName;
 
   final String _type;
 
   final int _size;
 
-  final String _channelSid;
+  final String? _channelSid;
 
   final int _messageIndex;
   //#endregion
@@ -24,7 +22,7 @@ class MessageMedia {
   }
 
   /// Get file name of media stream.
-  String get fileName {
+  String? get fileName {
     return _fileName;
   }
 
@@ -46,13 +44,10 @@ class MessageMedia {
     this._size,
     this._channelSid,
     this._messageIndex,
-  )   : assert(_sid != null),
-        assert(_type != null),
-        assert(_size != null),
-        assert(_messageIndex != null);
+  );
 
   /// Construct from a map.
-  factory MessageMedia._fromMap(Map<String, dynamic> map) {
+  static MessageMedia? _fromMap(Map<String, dynamic>? map) {
     if (map == null) {
       return null;
     }
@@ -63,8 +58,10 @@ class MessageMedia {
   /// Save media content stream that could be streamed or downloaded by client.
   ///
   /// Provided file could be an existing file and a none existing file.
-  Future<bool> download(File output) async {
-    assert(output != null);
+  Future<bool?> download(File? output) async {
+    if (output == null) {
+      return null;
+    }
     return await TwilioProgrammableChat._methodChannel.invokeMethod('Message#getMedia', {
       'channelSid': _channelSid,
       'messageIndex': _messageIndex,

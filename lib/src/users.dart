@@ -1,12 +1,10 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 /// Provides access to users and allows to manipulate user information.
 class Users {
   final List<User> _subscribedUsers = [];
 
-  User _myUser;
+  User? _myUser;
 
   /// Get a list of currently subscribed [User] objects.
   ///
@@ -18,7 +16,7 @@ class Users {
   /// Get logged in [User] object.
   ///
   /// Returns the [User] object for your currently logged in [User]. You can query and update this object at will.
-  User get myUser {
+  User? get myUser {
     return _myUser;
   }
 
@@ -56,8 +54,8 @@ class Users {
   }
 
   /// Retrieve user by id from the list of subscribe users
-  User getUserById(String id) {
-    return subscribedUsers.firstWhere((u) => u.identity == id, orElse: () => null);
+  User? getUserById(String id) {
+    return subscribedUsers.firstWhereOrNull((u) => u.identity == id);
   }
 
   /// Get user based on user identity and subscribe to real-time updates for this user.
@@ -80,7 +78,7 @@ class Users {
     if (map['myUser'] != null) {
       final myUserMap = Map<String, dynamic>.from(map['myUser']);
       _myUser ??= User._fromMap(myUserMap);
-      _myUser._updateFromMap(myUserMap);
+      _myUser!._updateFromMap(myUserMap);
     }
     if (map['subscribedUsers'] != null) {
       final List<Map<String, dynamic>> subscribedUsersList = map['subscribedUsers'].map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
