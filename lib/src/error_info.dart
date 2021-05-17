@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 /// Representation of a Chat Error Object.
@@ -25,16 +23,15 @@ class ErrorInfo implements Exception {
   final int code;
 
   /// Message containing a short explanation.
-  final String message;
+  final String? message;
 
   /// Get error category as a classifier.
   ///
   /// Local client errors get status 0, network related errors have their HTTP error code as a status.
-  final int status;
+  final int? status;
 
   ErrorInfo(this.code, this.message, this.status)
-      : assert(code != null),
-        assert(message != null),
+      : assert(message != null),
         assert(status != null);
 
   @override
