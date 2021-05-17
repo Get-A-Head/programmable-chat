@@ -10,7 +10,7 @@ class Attributes {
   /// Returns attributes type
   AttributesType get type => _type;
 
-  Attributes(this._type, this._json) : assert(_json != null);
+  Attributes(this._type, this._json);
 
   factory Attributes.fromMap(Map<String, dynamic> map) {
     var type = AttributesType.values.firstWhere((type) {
@@ -24,7 +24,12 @@ class Attributes {
     if (type != AttributesType.OBJECT) {
       return null;
     } else {
-      return jsonDecode(_json!);
+      var json = _json;
+      if (json == null) {
+        return null;
+      } else {
+        return jsonDecode(json);
+      }
     }
   }
 
@@ -32,7 +37,12 @@ class Attributes {
     if (type != AttributesType.ARRAY) {
       return null;
     } else {
-      return List<Map<String, dynamic>>.from(jsonDecode(_json!));
+      var json = _json;
+      if (json == null) {
+        return null;
+      } else {
+        return List<Map<String, dynamic>>.from(jsonDecode(json));
+      }
     }
   }
 
@@ -48,7 +58,12 @@ class Attributes {
     if (type != AttributesType.NUMBER) {
       return null;
     } else {
-      return num.tryParse(_json!);
+      var json = _json;
+      if (json == null) {
+        return null;
+      } else {
+        return num.tryParse(json);
+      }
     }
   }
 

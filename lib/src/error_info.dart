@@ -30,9 +30,7 @@ class ErrorInfo implements Exception {
   /// Local client errors get status 0, network related errors have their HTTP error code as a status.
   final int? status;
 
-  ErrorInfo(this.code, this.message, this.status)
-      : assert(message != null),
-        assert(status != null);
+  ErrorInfo(this.code, this.message, this.status);
 
   @override
   String toString() {
