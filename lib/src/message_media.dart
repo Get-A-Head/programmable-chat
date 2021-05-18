@@ -47,10 +47,7 @@ class MessageMedia {
   );
 
   /// Construct from a map.
-  static MessageMedia? _fromMap(Map<String, dynamic>? map) {
-    if (map == null) {
-      return null;
-    }
+  factory MessageMedia._fromMap(Map<String, dynamic> map) {
     return MessageMedia(map['sid'], map['fileName'], map['type'], map['size'], map['channelSid'], map['messageIndex']);
   }
 

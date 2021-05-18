@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 class Message {
@@ -10,23 +8,23 @@ class Message {
 
   final DateTime _dateCreated;
 
-  String _messageBody;
+  String? _messageBody;
 
   final String _channelSid;
 
   final String _memberSid;
 
-  final Member _member;
+  final Member? _member;
 
   final Messages _messages;
 
   final int _messageIndex;
 
-  final MessageType _type;
+  final MessageType? _type;
 
   final bool _hasMedia;
 
-  final MessageMedia _media;
+  final MessageMedia? _media;
 
   final Attributes _attributes;
   //#endregion
@@ -48,7 +46,7 @@ class Message {
   }
 
   /// The body for this message.
-  String get messageBody {
+  String? get messageBody {
     return _messageBody;
   }
 
@@ -63,7 +61,7 @@ class Message {
   }
 
   /// Returns the member this message sent by.
-  Member get member {
+  Member? get member {
     return _member;
   }
 
@@ -80,7 +78,7 @@ class Message {
   /// Returns message type.
   ///
   /// If message has media type then [Message.media] shall return the descriptor for the attached media.
-  MessageType get type {
+  MessageType? get type {
     return _type;
   }
 
@@ -92,7 +90,7 @@ class Message {
   /// Get media descriptor of an associated media attachment, if exists.
   ///
   /// If the message type is [MessageType.TEXT] this method will return null.
-  MessageMedia get media {
+  MessageMedia? get media {
     return _media;
   }
 
@@ -115,17 +113,7 @@ class Message {
     this._hasMedia,
     this._media,
     this._attributes,
-  )   : assert(_sid != null),
-        assert(_author != null),
-        assert(_dateCreated != null),
-        assert(_channelSid != null),
-        assert(_memberSid != null),
-        assert(_messages != null),
-        assert(_messageIndex != null),
-        assert(_type != null),
-        assert(_attributes != null),
-        assert(_hasMedia != null),
-        assert((_hasMedia == true && _media != null) || (_hasMedia == false && _media == null));
+  ) : assert((_hasMedia == true && _media != null) || (_hasMedia == false && _media == null));
 
   /// Construct from a map.
   factory Message._fromMap(Map<String, dynamic> map, Messages messages) {
@@ -140,7 +128,7 @@ class Message {
       map['messageIndex'],
       EnumToString.fromString(MessageType.values, map['type']),
       map['hasMedia'],
-      MessageMedia._fromMap(map['media']?.cast<String, dynamic>()),
+      map['media'] == null ? null : MessageMedia._fromMap(map['media'].cast<String, dynamic>()),
       Attributes.fromMap(map['attributes'].cast<String, dynamic>()),
     );
     message._updateFromMap(map);
@@ -149,8 +137,8 @@ class Message {
 
   //#region Public API methods
   /// Returns the parent channel this message belongs to.
-  Future<Channel> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient.channels.getChannel(_channelSid);
+  Future<Channel?> getChannel() async {
+    var channel = await TwilioProgrammableChat.chatClient?.channels?.getChannel(_channelSid);
     return channel;
   }
 
