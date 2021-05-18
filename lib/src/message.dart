@@ -123,7 +123,7 @@ class Message {
       DateTime.parse(map['dateCreated']),
       map['channelSid'],
       map['memberSid'],
-      Member._fromMap(map['member']?.cast<String, dynamic>()),
+      map['member'] == null ? null : Member._fromMap(map['member'].cast<String, dynamic>()),
       messages,
       map['messageIndex'],
       EnumToString.fromString(MessageType.values, map['type']),

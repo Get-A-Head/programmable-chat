@@ -7,13 +7,13 @@ part of twilio_programmable_chat;
 class UserDescriptor {
   final String? _friendlyName;
 
-  final Attributes? _attributes;
+  final Attributes _attributes;
 
   final String _identity;
 
-  final bool? _isOnline;
+  final bool _isOnline;
 
-  final bool? _isNotifiable;
+  final bool _isNotifiable;
 
   /// Get user friendly name.
   String? get friendlyName {
@@ -21,7 +21,7 @@ class UserDescriptor {
   }
 
   /// Get user attributes.
-  Attributes? get attributes {
+  Attributes get attributes {
     return _attributes;
   }
 
@@ -31,12 +31,12 @@ class UserDescriptor {
   }
 
   /// [User] online status.
-  bool? get isOnline {
+  bool get isOnline {
     return _isOnline;
   }
 
   /// [User] notifiable status.
-  bool? get isNotifiable {
+  bool get isNotifiable {
     return _isNotifiable;
   }
 
@@ -55,7 +55,7 @@ class UserDescriptor {
 
   /// Subscribe to the user object.
   Future<User?> subscribe() async {
-    final user = await TwilioProgrammableChat.chatClient.users?.getAndSubscribeUser(_identity);
+    final user = await TwilioProgrammableChat.chatClient?.users?.getAndSubscribeUser(_identity);
     return user;
   }
 }

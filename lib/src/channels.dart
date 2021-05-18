@@ -99,7 +99,9 @@ class Channels {
 
       var memberList = [];
       for (final memberMap in memberMapList) {
-        memberList.add(Member._fromMap(memberMap));
+        if (memberMap != null) {
+          memberList.add(Member._fromMap(memberMap));
+        }
       }
       return memberList;
     } on PlatformException catch (err) {

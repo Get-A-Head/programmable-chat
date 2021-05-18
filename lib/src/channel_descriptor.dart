@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 /// Contains channel information.
@@ -12,21 +10,21 @@ class ChannelDescriptor {
   //#region Private API properties
   final String _sid;
 
-  String _friendlyName;
+  String? _friendlyName;
 
-  String _uniqueName;
+  String? _uniqueName;
 
-  Attributes _attributes;
+  Attributes? _attributes;
 
   final DateTime _dateCreated;
 
-  DateTime _dateUpdated;
+  DateTime? _dateUpdated;
 
   final String _createdBy;
 
-  int _membersCount;
+  int? _membersCount;
 
-  int _messagesCount;
+  int? _messagesCount;
   //#endregion
 
   //#region Public API properties
@@ -36,26 +34,29 @@ class ChannelDescriptor {
   }
 
   /// Get channel friendly name.
-  String get friendlyName {
+  String? get friendlyName {
     return _friendlyName;
   }
 
   /// Get channel unique name.
-  String get uniqueName {
+  String? get uniqueName {
     return _uniqueName;
   }
 
   /// Get channel attributes.
-  Attributes get attributes {
+  Attributes? get attributes {
     return _attributes;
   }
 
   /// Get the current user's participation status on this channel.
   ///
   /// Since for [ChannelDescriptor]s the status is unknown this function will always return [ChannelStatus.UNKNOWN].
-  Future<ChannelStatus> get status async {
+  Future<ChannelStatus?> get status async {
     var channel = await getChannel();
-    return channel?.status;
+    if (channel == null) {
+      return null;
+    }
+    return channel.status;
   }
 
   /// Get channel create date.
@@ -64,7 +65,7 @@ class ChannelDescriptor {
   }
 
   /// Get channel update date.
-  DateTime get dateUpdated {
+  DateTime? get dateUpdated {
     return _dateUpdated;
   }
 
@@ -74,19 +75,22 @@ class ChannelDescriptor {
   }
 
   /// Get number of members.
-  int get membersCount {
+  int? get membersCount {
     return _membersCount;
   }
 
   /// Get number of messages.
-  int get messagesCount {
+  int? get messagesCount {
     return _messagesCount;
   }
 
   /// Get number of unconsumed messages.
-  Future<int> get unconsumedMessagesCount async {
+  Future<int?> get unconsumedMessagesCount async {
     var channel = await getChannel();
-    return channel?.getUnconsumedMessagesCount();
+    if (channel == null) {
+      return null;
+    }
+    return channel.getUnconsumedMessagesCount();
   }
   //#endregion
 
@@ -94,9 +98,7 @@ class ChannelDescriptor {
     this._sid,
     this._dateCreated,
     this._createdBy,
-  )   : assert(_sid != null),
-        assert(_dateCreated != null),
-        assert(_createdBy != null);
+  );
 
   /// Construct from a map.
   factory ChannelDescriptor._fromMap(Map<String, dynamic> map) {
@@ -111,8 +113,8 @@ class ChannelDescriptor {
 
   //#region Public API methods
   /// Retrieve a full [Channel] object.
-  Future<Channel> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient.channels.getChannel(_sid);
+  Future<Channel?> getChannel() async {
+    var channel = await TwilioProgrammableChat.chatClient?.channels?.getChannel(_sid);
     return channel;
   }
   //#endregion

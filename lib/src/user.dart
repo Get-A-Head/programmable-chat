@@ -4,7 +4,7 @@ class User {
   //#region Private API properties
   String? _friendlyName;
 
-  final Attributes? _attributes;
+  final Attributes _attributes;
 
   final String _identity;
 
@@ -44,7 +44,7 @@ class User {
   }
 
   /// Get attributes map
-  Attributes? get attributes {
+  Attributes get attributes {
     return _attributes;
   }
   //#endregion
