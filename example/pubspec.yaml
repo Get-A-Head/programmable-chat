@@ -25,7 +25,7 @@ dependencies:
 dev_dependencies:
   flutter_driver:
     sdk: flutter
-  test: any
+#  test: any
   pedantic: 1.8.0+1
   twilio_programmable_chat:
     path: ../

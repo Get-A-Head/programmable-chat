@@ -24,12 +24,12 @@ class ChannelPage extends StatefulWidget {
   ) {
     return Provider<ChannelBloc>(
       create: (BuildContext context) => ChannelBloc(myUsername: myUsername, chatClient: chatClient, channelDescriptor: channelDescriptor),
+      dispose: (BuildContext context, ChannelBloc channelBloc) => channelBloc.dispose(),
       child: Consumer<ChannelBloc>(
         builder: (BuildContext context, ChannelBloc channelBloc, _) => ChannelPage(
           channelBloc: channelBloc,
         ),
       ),
-      dispose: (BuildContext context, ChannelBloc channelBloc) => channelBloc.dispose(),
     );
   }
 
@@ -153,7 +153,7 @@ class _ChannelPageState extends State<ChannelPage> {
                   icon: Icon(Icons.send),
                   onPressed: () async {
                     await widget.channelBloc.sendMessage();
-                    await widget.channelBloc.scrollController.jumpTo(widget.channelBloc.scrollController.position.maxScrollExtent);
+                    widget.channelBloc.scrollController.jumpTo(widget.channelBloc.scrollController.position.maxScrollExtent);
                     setState(() {
                       widget.channelBloc.messageController.text = '';
                       FocusScope.of(context).requestFocus(FocusNode());
@@ -285,13 +285,13 @@ class _ChannelPageState extends State<ChannelPage> {
               title: Text('You created this channel'),
               content: Text('If you leave this channel, it will be deleted since you created it.'),
               actions: <Widget>[
-                FlatButton(
-                  child: Text('Cancel'),
+                TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('Cancel'),
                 ),
-                RaisedButton(
-                  child: Text('Leave'),
+                ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('Leave'),
                 ),
               ],
             );

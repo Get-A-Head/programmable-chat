@@ -68,16 +68,16 @@ class _AddChannelDialogState extends State<AddChannelDialog> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                FlatButton(
-                  child: Text('Cancel'),
+                TextButton(
                   onPressed: () => Navigator.of(context).pop(null),
+                  child: Text('Cancel'),
                 ),
-                RaisedButton(
-                  child: Text('Add'),
+                ElevatedButton(
                   onPressed: () => Navigator.of(context).pop({
                     'name': _controller.value.text,
                     'type': _channelType,
                   }),
+                  child: Text('Add'),
                 ),
               ],
             )

@@ -5,7 +5,7 @@ part of twilio_programmable_chat;
 /// [Paginator] represents a single page of results. You can get items in this page using [Paginator.items].
 /// The number if items in page can be retrieved using [Paginator.pageSize].
 /// If all items did not fit into single page [Paginator.hasNextPage] will return true. You could use [Paginator.requestNextPage] to get the next page of results.
-/// If [Paginator.hasNextPage()] returns false, then this is the last page. Calling [Paginator.requestNextPage()] on the last page will throw [PlatformException].
+/// If [Paginator.hasNextPage] returns false, then this is the last page. Calling [Paginator.requestNextPage()] on the last page will throw [PlatformException].
 class Paginator<T> {
   final Map<String, dynamic> _passOn;
 

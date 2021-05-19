@@ -20,12 +20,12 @@ class InvitePage extends StatefulWidget {
   ) {
     return Provider<InviteBloc>(
       create: (BuildContext context) => InviteBloc(myIdentity: myIdentity, chatClient: chatClient, channelDescriptor: channelDescriptor),
+      dispose: (BuildContext context, InviteBloc inviteBloc) => inviteBloc.dispose(),
       child: Consumer<InviteBloc>(
         builder: (BuildContext context, InviteBloc inviteBloc, _) => InvitePage(
           inviteBloc: inviteBloc,
         ),
       ),
-      dispose: (BuildContext context, InviteBloc inviteBloc) => inviteBloc.dispose(),
     );
   }
 }
@@ -56,11 +56,11 @@ class InvitePageState extends State<InvitePage> {
             itemBuilder: (BuildContext context, int index) {
               var member = model.members[index];
               return InkWell(
+                onTap: () => widget.inviteBloc.inviteToChannel(member),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(member.identity),
                 ),
-                onTap: () => widget.inviteBloc.inviteToChannel(member),
               );
             },
           );

@@ -119,10 +119,8 @@ class ChannelDescriptor {
   void _updateFromMap(Map<String, dynamic> map) {
     _uniqueName = map['uniqueName'];
     _friendlyName = map['friendlyName'];
-    assert(_friendlyName != null);
     _attributes = Attributes.fromMap(map['attributes'].cast<String, dynamic>());
     _dateUpdated = DateTime.parse(map['dateUpdated']);
-    assert(_dateUpdated != null);
     _membersCount = map['membersCount'];
     assert(_membersCount != null);
     _messagesCount = map['messagesCount'];
