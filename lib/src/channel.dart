@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 //#region Channel events
@@ -8,9 +6,7 @@ class MessageUpdatedEvent {
 
   final MessageUpdateReason reason;
 
-  MessageUpdatedEvent(this.message, this.reason)
-      : assert(message != null),
-        assert(reason != null);
+  MessageUpdatedEvent(this.message, this.reason);
 }
 
 class MemberUpdatedEvent {
@@ -18,9 +14,7 @@ class MemberUpdatedEvent {
 
   final MemberUpdateReason reason;
 
-  MemberUpdatedEvent(this.member, this.reason)
-      : assert(member != null),
-        assert(reason != null);
+  MemberUpdatedEvent(this.member, this.reason);
 }
 
 class TypingEvent {
@@ -28,44 +22,42 @@ class TypingEvent {
 
   final Member member;
 
-  TypingEvent(this.channel, this.member)
-      : assert(channel != null),
-        assert(member != null);
+  TypingEvent(this.channel, this.member);
 }
 //#endregion
 
 /// Container for channel object.
 class Channel {
   /// Local caching event stream so each instance will use the same stream.
-  static final Map<String, Stream> _channelStreams = {};
-  static final Map<String, StreamSubscription> _channelStreamSubscriptions = {};
+  static final Map<String, Stream?> _channelStreams = {};
+  static final Map<String, StreamSubscription?> _channelStreamSubscriptions = {};
 
   //#region Private API properties
   final String _sid;
 
-  final ChannelType _type;
+  final ChannelType? _type;
 
   Attributes _attributes;
 
-  Messages _messages;
+  Messages? _messages;
 
-  ChannelStatus _status;
+  ChannelStatus? _status;
 
-  Members _members;
+  Members? _members;
 
-  ChannelSynchronizationStatus _synchronizationStatus;
+  ChannelSynchronizationStatus? _synchronizationStatus;
 
-  DateTime _dateCreated;
+  DateTime? _dateCreated;
 
-  String _createdBy;
+  String? _createdBy;
 
-  DateTime _dateUpdated;
+  DateTime? _dateUpdated;
 
-  DateTime _lastMessageDate;
+  DateTime? _lastMessageDate;
 
-  int _lastMessageIndex;
+  int? _lastMessageIndex;
 
-  bool _isSubscribed;
+  late bool _isSubscribed;
 
   bool _hasSynchronized = false;
   //#endregion
@@ -80,56 +72,56 @@ class Channel {
   }
 
   /// The channel type.
-  ChannelType get type {
+  ChannelType? get type {
     return _type;
   }
 
   /// Get messages object that allows access to messages in the channel.
-  Messages get messages {
+  Messages? get messages {
     return _messages;
   }
 
   /// Get the current user's participation status on this channel.
-  ChannelStatus get status {
+  ChannelStatus? get status {
     return _status;
   }
 
   /// Get members object that allows access to member roster in the channel.
   ///
   /// You need to synchronize the channel before you can call this method unless you just joined the channel, in which case it synchronizes automatically.
-  Members get members {
+  Members? get members {
     return _members;
   }
 
   /// Get the current synchronization status for channel.
-  ChannelSynchronizationStatus get synchronizationStatus {
+  ChannelSynchronizationStatus? get synchronizationStatus {
     return _synchronizationStatus;
   }
 
   /// Get creation date of the channel.
-  DateTime get dateCreated {
+  DateTime? get dateCreated {
     return _dateCreated;
   }
 
   /// Get creator of the channel.
-  String get createdBy {
+  String? get createdBy {
     return _createdBy;
   }
 
   /// Get update date of the channel.
   ///
   /// Update date changes when channel attributes, friendly name or unique name are modified. It will not change in response to messages posted or members added or removed.
-  DateTime get dateUpdated {
+  DateTime? get dateUpdated {
     return _dateUpdated;
   }
 
   /// Get last message date in the channel.
-  DateTime get lastMessageDate {
+  DateTime? get lastMessageDate {
     return _lastMessageDate;
   }
 
   /// Get last message's index in the channel.
-  int get lastMessageIndex {
+  int? get lastMessageIndex {
     return _lastMessageIndex;
   }
 
@@ -155,7 +147,7 @@ class Channel {
   /// Called when a [Message] is added to the channel the current user is subscribed to.
   ///
   /// You could obtain the [Channel] where it was added by using [Message.getChannel] or [Message.channelSid].
-  Stream<Message> onMessageAdded;
+  late Stream<Message> onMessageAdded;
 
   final StreamController<MessageUpdatedEvent> _onMessageUpdatedCtrl = StreamController<MessageUpdatedEvent>.broadcast();
 
@@ -163,14 +155,14 @@ class Channel {
   ///
   /// You could obtain the [Channel] where it was updated by using [Message.getChannel] or [Message.channelSid].
   /// [Message] change events include body updates and attribute updates.
-  Stream<MessageUpdatedEvent> onMessageUpdated;
+  late Stream<MessageUpdatedEvent> onMessageUpdated;
 
   final StreamController<Message> _onMessageDeletedCtrl = StreamController<Message>.broadcast();
 
   /// Called when a [Message] is deleted from the channel the current user is subscribed to.
   ///
   /// You could obtain the [Channel] where it was deleted by using [Message.getChannel] or [Message.channelSid].
-  Stream<Message> onMessageDeleted;
+  late Stream<Message> onMessageDeleted;
   //#endregion
 
   //#region Member events
@@ -179,7 +171,7 @@ class Channel {
   /// Called when a [Member] is added to the channel the current user is subscribed to.
   ///
   /// You could obtain the [Channel] where it was added by using [Member.getChannel].
-  Stream<Member> onMemberAdded;
+  late Stream<Member> onMemberAdded;
 
   final StreamController<MemberUpdatedEvent> _onMemberUpdatedCtrl = StreamController<MemberUpdatedEvent>.broadcast();
 
@@ -187,35 +179,35 @@ class Channel {
   ///
   /// You could obtain the [Channel] where it was updated by using [Member.getChannel].
   /// [Member] change events include body updates and attribute updates.
-  Stream<MemberUpdatedEvent> onMemberUpdated;
+  late Stream<MemberUpdatedEvent> onMemberUpdated;
 
   final StreamController<Member> _onMemberDeletedCtrl = StreamController<Member>.broadcast();
 
   /// Called when a [Member] is deleted from the channel the current user is subscribed to.
   ///
   /// You could obtain the [Channel] where it was deleted by using [Member.getChannel].
-  Stream<Member> onMemberDeleted;
+  late Stream<Member> onMemberDeleted;
   //#endregion
 
   //#region Typing events
   final StreamController<TypingEvent> _onTypingStartedCtrl = StreamController<TypingEvent>.broadcast();
 
   /// Called when an [Member] starts typing in a [Channel].
-  Stream<TypingEvent> onTypingStarted;
+  late Stream<TypingEvent> onTypingStarted;
 
   final StreamController<TypingEvent> _onTypingEndedCtrl = StreamController<TypingEvent>.broadcast();
 
   /// Called when an [Member] stops typing in a [Channel\.
   ///
   /// Typing indicator has a timeout after user stops typing to avoid triggering it too often. Expect about 5 seconds delay between stopping typing and receiving typing ended event.
-  Stream<TypingEvent> onTypingEnded;
+  late Stream<TypingEvent> onTypingEnded;
   //#endregion
 
   //#region Synchronization event
   final StreamController<Channel> _onSynchronizationChangedCtrl = StreamController<Channel>.broadcast();
 
   /// Called when channel synchronization status changed.
-  Stream<Channel> onSynchronizationChanged;
+  late Stream<Channel> onSynchronizationChanged;
   //#endregion
 
   Channel(
@@ -224,9 +216,7 @@ class Channel {
     this._dateCreated,
     this._type,
     this._attributes,
-  )   : assert(_sid != null),
-        assert(_type != null),
-        assert(_attributes != null) {
+  ) {
     onMessageAdded = _onMessageAddedCtrl.stream;
     onMessageUpdated = _onMessageUpdatedCtrl.stream;
     onMessageDeleted = _onMessageDeletedCtrl.stream;
@@ -240,7 +230,7 @@ class Channel {
     _messages = Messages(this);
     _members = Members(_sid);
     _channelStreams[_sid] ??= EventChannel('twilio_programmable_chat/$_sid').receiveBroadcastStream(0);
-    _channelStreamSubscriptions[_sid] ??= _channelStreams[_sid].listen(_parseEvents);
+    _channelStreamSubscriptions[_sid] ??= _channelStreams[_sid]?.listen(_parseEvents);
   }
 
   /// Construct from a map.
@@ -382,7 +372,7 @@ class Channel {
   /// Get friendly name of the channel.
   ///
   /// Friendly name is a free-form text string, it is not unique and could be used for user-friendly channel name display in the UI.
-  Future<String> getFriendlyName() async {
+  Future<String?> getFriendlyName() async {
     try {
       return await TwilioProgrammableChat._methodChannel.invokeMethod('Channel#getFriendlyName', {'channelSid': _sid});
     } on PlatformException catch (err) {
@@ -391,7 +381,7 @@ class Channel {
   }
 
   /// Update the friendly name for this channel.
-  Future<String> setFriendlyName(String friendlyName) async {
+  Future<String?> setFriendlyName(String friendlyName) async {
     try {
       return await TwilioProgrammableChat._methodChannel.invokeMethod('Channel#setFriendlyName', {'channelSid': _sid, 'friendlyName': friendlyName});
     } on PlatformException catch (err) {
@@ -402,7 +392,7 @@ class Channel {
   /// The current user's notification level on this channel.
   ///
   /// This property reflects whether the user will receive push notifications for activity on this channel.
-  Future<NotificationLevel> getNotificationLevel() async {
+  Future<NotificationLevel?> getNotificationLevel() async {
     try {
       return EnumToString.fromString(NotificationLevel.values, await TwilioProgrammableChat._methodChannel.invokeMethod('Channel#getNotificationLevel', {'channelSid': _sid}));
     } on PlatformException catch (err) {
@@ -413,7 +403,7 @@ class Channel {
   /// Set the user's notification level for the channel.
   ///
   /// This property determines whether the user will receive push notifications for activity on this channel.
-  Future<NotificationLevel> setNotificationLevel(NotificationLevel notificationLevel) async {
+  Future<NotificationLevel?> setNotificationLevel(NotificationLevel notificationLevel) async {
     try {
       return EnumToString.fromString(
         NotificationLevel.values,
@@ -430,7 +420,7 @@ class Channel {
   /// Get unique name of the channel.
   ///
   /// Unique name is similar to SID but can be specified by the user.
-  Future<String> getUniqueName() async {
+  Future<String?> getUniqueName() async {
     try {
       return await TwilioProgrammableChat._methodChannel.invokeMethod('Channel#getUniqueName', {'channelSid': _sid});
     } on PlatformException catch (err) {
@@ -441,7 +431,7 @@ class Channel {
   /// Update the unique name for this channel.
   ///
   /// Unique name is unique within Service Instance. You will receive an error if you try to set a name that is not unique.
-  Future<String> setUniqueName(String uniqueName) async {
+  Future<String?> setUniqueName(String uniqueName) async {
     try {
       return await TwilioProgrammableChat._methodChannel.invokeMethod('Channel#setUniqueName', {'channelSid': _sid, 'uniqueName': uniqueName});
     } on PlatformException catch (err) {
@@ -454,9 +444,11 @@ class Channel {
   ///
   /// Cancels the [StreamSubscription] and removes the cached reference of this channel.
   Future<void> _dispose() async {
-    await _channelStreamSubscriptions[_sid].cancel();
-    _channelStreamSubscriptions.remove(_sid);
-    _channelStreams.remove(_sid);
+    if (_channelStreamSubscriptions[_sid] != null) {
+      await _channelStreamSubscriptions[_sid]!.cancel();
+      _channelStreamSubscriptions.remove(_sid);
+      _channelStreams.remove(_sid);
+    }
   }
 
   /// Update properties from a map.
@@ -468,7 +460,10 @@ class Channel {
 
     if (map['messages'] != null) {
       final messagesMap = Map<String, dynamic>.from(map['messages']);
-      _messages._updateFromMap(messagesMap);
+      var msgs = _messages;
+      if (msgs != null) {
+        msgs._updateFromMap(messagesMap);
+      }
     }
 
     if (map['attributes'] != null) {
@@ -486,7 +481,7 @@ class Channel {
 
   /// Parse native channel events to the right event streams.
   void _parseEvents(dynamic event) {
-    final String eventName = event['name'];
+    final String? eventName = event['name'];
     TwilioProgrammableChat._log("Channel => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
     final data = Map<String, dynamic>.from(event['data']);
 
@@ -495,14 +490,17 @@ class Channel {
       _updateFromMap(channelMap);
     }
 
-    Message message;
+    Message? message;
     if (data['message'] != null) {
       final messageMap = Map<String, dynamic>.from(data['message'] as Map<dynamic, dynamic>);
       // TODO(WLFN): should we cache this so we can just use references?
-      message = Message._fromMap(messageMap, messages);
+      var msgs = messages;
+      if (msgs != null) {
+        message = Message._fromMap(messageMap, msgs);
+      }
     }
 
-    Member member;
+    Member? member;
     if (data['member'] != null) {
       final memberMap = Map<String, dynamic>.from(data['member'] as Map<dynamic, dynamic>);
       // TODO(WLFN): should we cache this so we can just use references?
@@ -524,38 +522,60 @@ class Channel {
 
     switch (eventName) {
       case 'messageAdded':
-        assert(message != null);
-        _onMessageAddedCtrl.add(message);
+        if (message != null) {
+          _onMessageAddedCtrl.add(message);
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'messageAdded' => Attempting to operate on NULL.");
+        }
         break;
       case 'messageUpdated':
-        assert(message != null);
-        assert(reason != null);
-        _onMessageUpdatedCtrl.add(MessageUpdatedEvent(message, reason));
+        if (message != null && reason != null) {
+          _onMessageUpdatedCtrl.add(MessageUpdatedEvent(message, reason));
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => Attempting to operate on NULL.");
+        }
         break;
       case 'messageDeleted':
-        assert(message != null);
-        _onMessageDeletedCtrl.add(message);
+        if (message != null) {
+          _onMessageDeletedCtrl.add(message);
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'messageDeleted' => Attempting to operate on NULL.");
+        }
         break;
       case 'memberAdded':
-        assert(member != null);
-        _onMemberAddedCtrl.add(member);
+        if (member != null) {
+          _onMemberAddedCtrl.add(member);
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'memberAdded' => Attempting to operate on NULL.");
+        }
         break;
       case 'memberUpdated':
-        assert(member != null);
-        assert(reason != null);
-        _onMemberUpdatedCtrl.add(MemberUpdatedEvent(member, reason));
+        if (member != null && reason != null) {
+          _onMemberUpdatedCtrl.add(MemberUpdatedEvent(member, reason));
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => Attempting to operate on NULL.");
+        }
         break;
       case 'memberDeleted':
-        assert(member != null);
-        _onMemberDeletedCtrl.add(member);
+        if (member != null) {
+          _onMemberDeletedCtrl.add(member);
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'memberDeleted' => Attempting to operate on NULL.");
+        }
         break;
       case 'typingStarted':
-        assert(member != null);
-        _onTypingStartedCtrl.add(TypingEvent(this, member));
+        if (member != null) {
+          _onTypingStartedCtrl.add(TypingEvent(this, member));
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'typingStarted' => Attempting to operate on NULL.");
+        }
         break;
       case 'typingEnded':
-        assert(member != null);
-        _onTypingEndedCtrl.add(TypingEvent(this, member));
+        if (member != null) {
+          _onTypingEndedCtrl.add(TypingEvent(this, member));
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'typingEnded' => Attempting to operate on NULL.");
+        }
         break;
       case 'synchronizationChanged':
         _onSynchronizationChangedCtrl.add(this);

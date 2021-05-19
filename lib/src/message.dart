@@ -123,12 +123,12 @@ class Message {
       DateTime.parse(map['dateCreated']),
       map['channelSid'],
       map['memberSid'],
-      map['member'] == null ? null : Member._fromMap(map['member'].cast<String, dynamic>()),
+      map['member'] != null ? Member._fromMap(map['member'].cast<String, dynamic>()) : null,
       messages,
       map['messageIndex'],
       EnumToString.fromString(MessageType.values, map['type']),
       map['hasMedia'],
-      map['media'] == null ? null : MessageMedia._fromMap(map['media'].cast<String, dynamic>()),
+      map['media'] != null ? MessageMedia._fromMap(map['media'].cast<String, dynamic>()) : null,
       Attributes.fromMap(map['attributes'].cast<String, dynamic>()),
     );
     message._updateFromMap(map);

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of twilio_programmable_chat;
 
 /// Entry point for the Twilio Programmable Dart.
@@ -14,11 +12,11 @@ class TwilioProgrammableChat {
 
   static const EventChannel _notificationChannel = EventChannel('twilio_programmable_chat/notification');
 
-  static StreamSubscription _loggingStream;
+  static StreamSubscription? _loggingStream;
 
   static bool _dartDebug = false;
 
-  static ChatClient chatClient;
+  static ChatClient? chatClient;
 
   static Exception _convertException(PlatformException err) {
     var code = int.tryParse(err.code);
@@ -51,9 +49,6 @@ class TwilioProgrammableChat {
     bool native = false,
     bool sdk = false,
   }) async {
-    assert(dart != null);
-    assert(native != null);
-    assert(sdk != null);
     _dartDebug = dart;
     await _methodChannel.invokeMethod('debug', {'native': native, 'sdk': sdk});
     if (native && _loggingStream == null) {
@@ -63,16 +58,14 @@ class TwilioProgrammableChat {
         }
       });
     } else if (!native && _loggingStream != null) {
-      await _loggingStream.cancel();
+      await _loggingStream!.cancel();
       _loggingStream = null;
     }
   }
 
   /// Create to a [ChatClient].
-  static Future<ChatClient> create(String token, Properties properties) async {
-    assert(token != null);
+  static Future<ChatClient?> create(String token, Properties properties) async {
     assert(token != '');
-    assert(properties != null);
 
     if (chatClient != null) {
       throw UnsupportedError('Instantiation of multiple chatClients is not supported.'
