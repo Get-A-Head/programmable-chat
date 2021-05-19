@@ -20,12 +20,12 @@ class MembersPage extends StatefulWidget {
   ) {
     return Provider<MembersBloc>(
       create: (BuildContext context) => MembersBloc(chatClient: chatClient, channelDescriptor: channelDescriptor),
+      dispose: (BuildContext context, MembersBloc membersBloc) => membersBloc.dispose(),
       child: Consumer<MembersBloc>(
         builder: (BuildContext context, MembersBloc membersBloc, _) => MembersPage(
           membersBloc: membersBloc,
         ),
       ),
-      dispose: (BuildContext context, MembersBloc membersBloc) => membersBloc.dispose(),
     );
   }
 }
