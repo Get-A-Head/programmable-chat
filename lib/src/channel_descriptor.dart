@@ -16,11 +16,11 @@ class ChannelDescriptor {
 
   Attributes? _attributes;
 
-  final DateTime _dateCreated;
+  final DateTime? _dateCreated;
 
   DateTime? _dateUpdated;
 
-  final String _createdBy;
+  final String? _createdBy;
 
   int? _membersCount;
 
@@ -60,7 +60,7 @@ class ChannelDescriptor {
   }
 
   /// Get channel create date.
-  DateTime get dateCreated {
+  DateTime? get dateCreated {
     return _dateCreated;
   }
 
@@ -70,7 +70,7 @@ class ChannelDescriptor {
   }
 
   /// Get creator of the channel.
-  String get createdBy {
+  String? get createdBy {
     return _createdBy;
   }
 
@@ -114,7 +114,7 @@ class ChannelDescriptor {
   //#region Public API methods
   /// Retrieve a full [Channel] object.
   Future<Channel?> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient?.channels?.getChannel(_sid);
+    var channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_sid);
     return channel;
   }
   //#endregion
@@ -123,7 +123,7 @@ class ChannelDescriptor {
   void _updateFromMap(Map<String, dynamic> map) {
     _uniqueName = map['uniqueName'];
     _friendlyName = map['friendlyName'];
-    _attributes = Attributes.fromMap(map['attributes'].cast<String, dynamic>());
+    _attributes = map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null);
     _dateUpdated = DateTime.parse(map['dateUpdated']);
     _membersCount = map['membersCount'];
     assert(_membersCount != null);

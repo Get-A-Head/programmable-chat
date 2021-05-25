@@ -10,39 +10,29 @@ class Attributes {
   /// Returns attributes type
   AttributesType get type => _type;
 
-  Attributes(this._type, this._json);
+  Attributes(this._type, this._json) : assert((_type == AttributesType.NULL && _json == null) || (_type != AttributesType.NULL && _json != null));
 
   factory Attributes.fromMap(Map<String, dynamic> map) {
-    var type = AttributesType.values.firstWhere((type) {
-      return type.toString().split('.')[1] == (map['type']);
-    });
+    var type = EnumToString.fromString(AttributesType.values, map['type']) ?? AttributesType.NULL;
     var json = map['data'];
     return Attributes(type, json);
   }
 
   Map<String, dynamic>? getJSONObject() {
-    if (type != AttributesType.OBJECT) {
+    var json = _json;
+    if (type != AttributesType.OBJECT || json == null) {
       return null;
     } else {
-      var json = _json;
-      if (json == null) {
-        return null;
-      } else {
-        return jsonDecode(json);
-      }
+      return jsonDecode(json);
     }
   }
 
   List<Map<String, dynamic>>? getJSONArray() {
-    if (type != AttributesType.ARRAY) {
+    var json = _json;
+    if (type != AttributesType.ARRAY || json == null) {
       return null;
     } else {
-      var json = _json;
-      if (json == null) {
-        return null;
-      } else {
-        return List<Map<String, dynamic>>.from(jsonDecode(json));
-      }
+      return List<Map<String, dynamic>>.from(jsonDecode(json));
     }
   }
 
@@ -55,15 +45,11 @@ class Attributes {
   }
 
   num? getNumber() {
-    if (type != AttributesType.NUMBER) {
+    var json = _json;
+    if (type != AttributesType.NUMBER || json == null) {
       return null;
     } else {
-      var json = _json;
-      if (json == null) {
-        return null;
-      } else {
-        return num.tryParse(json);
-      }
+      return num.tryParse(json);
     }
   }
 

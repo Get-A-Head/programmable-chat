@@ -61,12 +61,14 @@ class Users {
   /// Get user based on user identity and subscribe to real-time updates for this user.
   ///
   /// There's a limit on the number of simultaneously subscribed objects in the SDK. This is to reduce consumed memory and network traffic.
-  Future<User> getAndSubscribeUser(String identity) async {
+  Future<User?> getAndSubscribeUser(String identity) async {
     try {
       final methodData = await TwilioProgrammableChat._methodChannel.invokeMethod('Users#getAndSubscribeUser', {'identity': identity});
       final userMap = Map<String, dynamic>.from(methodData);
-      final user = User._fromMap(userMap);
-      _subscribedUsers.add(user);
+      if (userMap['identity'] == null) {
+        return null;
+      }
+      final user = _createOrSubscribeUser(userMap);
       return user;
     } on PlatformException catch (err) {
       throw TwilioProgrammableChat._convertException(err);
@@ -77,21 +79,30 @@ class Users {
   void _updateFromMap(Map<String, dynamic> map) {
     if (map['myUser'] != null) {
       final myUserMap = Map<String, dynamic>.from(map['myUser']);
-      _myUser ??= User._fromMap(myUserMap);
-      _myUser!._updateFromMap(myUserMap);
+      if (myUserMap['identity'] != null) {
+        _myUser ??= User._fromMap(myUserMap);
+        _myUser!._updateFromMap(myUserMap);
+      }
     }
     if (map['subscribedUsers'] != null) {
       final List<Map<String, dynamic>> subscribedUsersList = map['subscribedUsers'].map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
       for (final subscribedUserMap in subscribedUsersList) {
-        final subscribedUser = _subscribedUsers.firstWhere(
-          (c) => c._identity == subscribedUserMap['identity'],
-          orElse: () => User._fromMap(subscribedUserMap),
-        );
-        if (!_subscribedUsers.contains(subscribedUser)) {
-          _subscribedUsers.add(subscribedUser);
+        if (subscribedUserMap['identity'] != null) {
+          var subscribedUser = _createOrSubscribeUser(subscribedUserMap);
+          subscribedUser._updateFromMap(subscribedUserMap);
         }
-        subscribedUser._updateFromMap(subscribedUserMap);
       }
     }
+  }
+
+  User _createOrSubscribeUser(Map<String, dynamic> map) {
+    final subscribedUser = _subscribedUsers.firstWhere(
+      (c) => c._identity == map['identity'],
+      orElse: () => User._fromMap(map),
+    );
+    if (!_subscribedUsers.contains(subscribedUser)) {
+      _subscribedUsers.add(subscribedUser);
+    }
+    return subscribedUser;
   }
 }

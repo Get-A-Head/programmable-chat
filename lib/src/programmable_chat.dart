@@ -65,7 +65,7 @@ class TwilioProgrammableChat {
 
   /// Create to a [ChatClient].
   static Future<ChatClient?> create(String token, Properties properties) async {
-    assert(token != '');
+    assert(token.isNotEmpty);
 
     if (chatClient != null) {
       throw UnsupportedError('Instantiation of multiple chatClients is not supported.'

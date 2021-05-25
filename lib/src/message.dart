@@ -2,23 +2,23 @@ part of twilio_programmable_chat;
 
 class Message {
   //#region Private API properties
-  final String _sid;
+  final String? _sid;
 
-  final String _author;
+  final String? _author;
 
-  final DateTime _dateCreated;
+  final DateTime? _dateCreated;
 
   String? _messageBody;
 
   final String _channelSid;
 
-  final String _memberSid;
+  final String? _memberSid;
 
   final Member? _member;
 
   final Messages _messages;
 
-  final int _messageIndex;
+  final int? _messageIndex;
 
   final MessageType? _type;
 
@@ -31,17 +31,17 @@ class Message {
 
   //#region Public API properties
   /// Returns the identifier for this message.
-  String get sid {
+  String? get sid {
     return _sid;
   }
 
   /// The global identity of the author of this message.
-  String get author {
+  String? get author {
     return _author;
   }
 
   /// The creation date for this message.
-  DateTime get dateCreated {
+  DateTime? get dateCreated {
     return _dateCreated;
   }
 
@@ -56,7 +56,7 @@ class Message {
   }
 
   /// Returns the member SID of the member this message sent by.
-  String get memberSid {
+  String? get memberSid {
     return _memberSid;
   }
 
@@ -71,7 +71,7 @@ class Message {
   }
 
   /// Returns the index number for this message.
-  int get messageIndex {
+  int? get messageIndex {
     return _messageIndex;
   }
 
@@ -129,7 +129,7 @@ class Message {
       EnumToString.fromString(MessageType.values, map['type']),
       map['hasMedia'],
       map['media'] != null ? MessageMedia._fromMap(map['media'].cast<String, dynamic>()) : null,
-      Attributes.fromMap(map['attributes'].cast<String, dynamic>()),
+      map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null),
     );
     message._updateFromMap(map);
     return message;
@@ -138,7 +138,7 @@ class Message {
   //#region Public API methods
   /// Returns the parent channel this message belongs to.
   Future<Channel?> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient?.channels?.getChannel(_channelSid);
+    var channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
     return channel;
   }
 

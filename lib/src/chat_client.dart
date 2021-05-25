@@ -1,41 +1,5 @@
 part of twilio_programmable_chat;
 
-//#region ChatClient events
-class ChannelUpdatedEvent {
-  final Channel channel;
-
-  final ChannelUpdateReason reason;
-
-  ChannelUpdatedEvent(this.channel, this.reason);
-}
-
-class UserUpdatedEvent {
-  final User user;
-
-  final UserUpdateReason reason;
-
-  UserUpdatedEvent(this.user, this.reason);
-}
-
-class NewMessageNotificationEvent {
-  final String channelSid;
-
-  final String messageSid;
-
-  final int messageIndex;
-
-  NewMessageNotificationEvent(this.channelSid, this.messageSid, this.messageIndex);
-}
-
-class NotificationRegistrationEvent {
-  final bool? isSuccessful;
-
-  final ErrorInfo? error;
-
-  NotificationRegistrationEvent(this.isSuccessful, this.error);
-}
-//#endregion
-
 /// Chat client - main entry point for the Chat SDK.
 class ChatClient {
   /// Stream for the native chat events.
@@ -45,25 +9,25 @@ class ChatClient {
   late StreamSubscription<dynamic> _notificationStream;
 
   //#region Private API properties
-  Channels? _channels;
+  Channels _channels = Channels();
 
-  ConnectionState? _connectionState;
+  ConnectionState _connectionState = ConnectionState.UNKNOWN;
 
   final String _myIdentity;
 
-  Users? _users;
+  Users _users = Users();
 
-  bool? _isReachabilityEnabled;
+  bool _isReachabilityEnabled = false;
   //#endregion
 
   //#region Public API properties
   /// [Channels] available to the current client.
-  Channels? get channels {
+  Channels get channels {
     return _channels;
   }
 
   /// Current transport state
-  ConnectionState? get connectionState {
+  ConnectionState get connectionState {
     return _connectionState;
   }
 
@@ -73,12 +37,12 @@ class ChatClient {
   }
 
   /// Get [Users] interface.
-  Users? get users {
+  Users get users {
     return _users;
   }
 
   /// Get reachability service status.
-  bool? get isReachabilityEnabled {
+  bool get isReachabilityEnabled {
     return _isReachabilityEnabled;
   }
   //#endregion
@@ -294,25 +258,27 @@ class ChatClient {
 
   /// Update properties from a map.
   void _updateFromMap(Map<String, dynamic> map) {
-    _connectionState = EnumToString.fromString(ConnectionState.values, map['connectionState']);
-    _isReachabilityEnabled = map['isReachabilityEnabled'];
+    _connectionState = EnumToString.fromString(ConnectionState.values, map['connectionState']) ?? ConnectionState.UNKNOWN;
+    _isReachabilityEnabled = map['isReachabilityEnabled'] ?? false;
 
     if (map['channels'] != null) {
       final channelsMap = Map<String, dynamic>.from(map['channels']);
-      _channels ??= Channels._fromMap(channelsMap);
-      _channels!._updateFromMap(channelsMap);
+      _channels._updateFromMap(channelsMap);
     }
 
     if (map['users'] != null) {
       final usersMap = Map<String, dynamic>.from(map['users']);
-      _users ??= Users._fromMap(usersMap);
-      _users!._updateFromMap(usersMap);
+      _users._updateFromMap(usersMap);
     }
   }
 
   /// Parse native chat client events to the right event streams.
   void _parseEvents(dynamic event) {
-    final String? eventName = event['name'];
+    if (event['name'] == null) {
+      TwilioProgrammableChat._log('ChatClient => _parseEvents => eventName is null.');
+      return;
+    }
+    final String eventName = event['name'];
     TwilioProgrammableChat._log("ChatClient => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
     final data = Map<String, dynamic>.from(event['data'] ?? {});
 
@@ -366,17 +332,17 @@ class ChatClient {
         }
         break;
       case 'channelDeleted':
-        if (channelMap != null) {
-          var channel = Channels._channelsMap[channelMap['sid']];
-          Channels._channelsMap[channelMap['sid']] = null;
-          channel?._updateFromMap(channelMap);
-          if (channel != null) {
-            _onChannelDeletedCtrl.add(channel);
-          } else {
-            TwilioProgrammableChat._log("ChatClient => case 'channelDeleted' => channel is NULL.");
-          }
-        } else {
+        if (channelMap == null) {
           TwilioProgrammableChat._log("ChatClient => case 'channelDeleted' => channelMap is NULL.");
+          return;
+        }
+        var channel = Channels._channelsMap[channelMap['sid']];
+        Channels._channelsMap.remove(channelMap['sid']);
+        channel?._updateFromMap(channelMap);
+        if (channel != null) {
+          _onChannelDeletedCtrl.add(channel);
+        } else {
+          TwilioProgrammableChat._log("ChatClient => case 'channelDeleted' => channel is NULL.");
         }
         break;
       case 'channelInvited':
@@ -405,11 +371,14 @@ class ChatClient {
         break;
       case 'channelUpdated':
         if (channelMap != null && reason != null) {
-          Channels._updateChannelFromMap(channelMap);
-          _onChannelUpdatedCtrl.add(ChannelUpdatedEvent(
-            Channels._channelsMap[channelMap['sid']]!,
-            reason,
-          ));
+          var sid = channelMap['sid'];
+          if (sid != null) {
+            Channels._updateChannelFromMap(channelMap);
+            _onChannelUpdatedCtrl.add(ChannelUpdatedEvent(
+              Channels._channelsMap[sid]!,
+              reason,
+            ));
+          }
         } else {
           TwilioProgrammableChat._log("ChatClient => case 'channelUpdated' => Attempting to operate on NULL.");
         }
@@ -475,47 +444,53 @@ class ChatClient {
         _onTokenExpiredCtrl.add(null);
         break;
       case 'userSubscribed':
-        if (userMap != null) {
-          users?._updateFromMap({
-            'subscribedUsers': [userMap]
-          });
-          var user = users?.getUserById(userMap['identity']);
-          if (user != null) {
-            _onUserSubscribedCtrl.add(user);
-          } else {
-            TwilioProgrammableChat._log("ChatClient => case 'userSubscribed' => _users is NULL.");
-          }
-        } else {
+        if (userMap == null) {
           TwilioProgrammableChat._log("ChatClient => case 'userSubscribed' => userMap is NULL.");
+          return;
+        }
+        users._updateFromMap({
+          'subscribedUsers': [userMap]
+        });
+        var user = users.getUserById(userMap['identity']);
+        if (user != null) {
+          _onUserSubscribedCtrl.add(user);
+        } else {
+          TwilioProgrammableChat._log("ChatClient => case 'userSubscribed' => user is NULL.");
         }
         break;
       case 'userUnsubscribed':
-        if (userMap != null) {
-          var user = users?.getUserById(userMap['identity']);
-          if (user != null) {
-            user._updateFromMap(userMap);
-            users!.subscribedUsers.removeWhere((u) => u.identity == userMap!['identity']);
-            _onUserUnsubscribedCtrl.add(user);
-          } else {
-            TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => _users is NULL.");
-          }
-        } else {
+        if (userMap == null) {
           TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => Attempting to operate on NULL.");
+          return;
+        }
+        var user = users.getUserById(userMap['identity']);
+        if (user != null) {
+          user._updateFromMap(userMap);
+          users.subscribedUsers.removeWhere((u) => u.identity == userMap!['identity']);
+          _onUserUnsubscribedCtrl.add(user);
+        } else {
+          TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => _users is NULL.");
         }
         break;
       case 'userUpdated':
-        if (userMap != null && reason != null) {
-          users?._updateFromMap({
-            'subscribedUsers': [userMap]
-          });
-          var user = users?.getUserById(userMap['identity']);
-          if (user != null) {
-            _onUserUpdatedCtrl.add(UserUpdatedEvent(user, reason));
-          } else {
-            TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => _users is NULL.");
+        if (userMap == null || reason == null) {
+          if (userMap == null && reason == null) {
+            TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => Both 'userMap' and 'reason' are NULL.");
+          } else if (userMap == null) {
+            TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => 'userMap' is NULL.");
+          } else if (reason == null) {
+            TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => 'reason' is NULL.");
           }
+          return;
+        }
+        users._updateFromMap({
+          'subscribedUsers': [userMap]
+        });
+        var user = users.getUserById(userMap['identity']);
+        if (user != null) {
+          _onUserUpdatedCtrl.add(UserUpdatedEvent(user, reason));
         } else {
-          TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => Attempting to operate on NULL.");
+          TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => user is NULL.");
         }
         break;
       default:
@@ -526,7 +501,11 @@ class ChatClient {
 
   /// Parse native chat client events to the right event streams.
   void _parseNotificationEvents(dynamic event) {
-    final String? eventName = event['name'];
+    if (event['name'] == null) {
+      TwilioProgrammableChat._log('ChatClient => _parseNotificationEvents => eventName is null.');
+      return;
+    }
+    final String eventName = event['name'];
     TwilioProgrammableChat._log("ChatClient => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
     final data = Map<String, dynamic>.from(event['data']);
 

@@ -9,7 +9,7 @@ class UserDescriptor {
 
   final Attributes _attributes;
 
-  final String _identity;
+  final String? _identity;
 
   final bool _isOnline;
 
@@ -26,7 +26,7 @@ class UserDescriptor {
   }
 
   /// Get user identity.
-  String get identity {
+  String? get identity {
     return _identity;
   }
 
@@ -46,16 +46,20 @@ class UserDescriptor {
   factory UserDescriptor._fromMap(Map<String, dynamic> map) {
     return UserDescriptor(
       map['friendlyName'],
-      Attributes.fromMap(map['attributes'].cast<String, dynamic>()),
+      map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null),
       map['identity'],
-      map['isOnline'],
-      map['isNotifiable'],
+      map['isOnline'] ?? false,
+      map['isNotifiable'] ?? false,
     );
   }
 
   /// Subscribe to the user object.
   Future<User?> subscribe() async {
-    final user = await TwilioProgrammableChat.chatClient?.users?.getAndSubscribeUser(_identity);
+    var identity = _identity;
+    if (identity == null) {
+      throw Exception('_identity has null value.');
+    }
+    final user = await TwilioProgrammableChat.chatClient?.users.getAndSubscribeUser(identity);
     return user;
   }
 }

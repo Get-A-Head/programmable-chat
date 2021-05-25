@@ -35,17 +35,17 @@ class Channel {
   //#region Private API properties
   final String _sid;
 
-  final ChannelType? _type;
+  final ChannelType _type;
 
   Attributes _attributes;
 
-  Messages? _messages;
+  late Messages _messages;
 
-  ChannelStatus? _status;
+  ChannelStatus _status = ChannelStatus.UNKNOWN;
 
-  Members? _members;
+  late Members _members;
 
-  ChannelSynchronizationStatus? _synchronizationStatus;
+  ChannelSynchronizationStatus _synchronizationStatus = ChannelSynchronizationStatus.NONE;
 
   DateTime? _dateCreated;
 
@@ -57,7 +57,7 @@ class Channel {
 
   int? _lastMessageIndex;
 
-  late bool _isSubscribed;
+  bool _isSubscribed = false;
 
   bool _hasSynchronized = false;
   //#endregion
@@ -72,29 +72,29 @@ class Channel {
   }
 
   /// The channel type.
-  ChannelType? get type {
+  ChannelType get type {
     return _type;
   }
 
   /// Get messages object that allows access to messages in the channel.
-  Messages? get messages {
+  Messages get messages {
     return _messages;
   }
 
   /// Get the current user's participation status on this channel.
-  ChannelStatus? get status {
+  ChannelStatus get status {
     return _status;
   }
 
   /// Get members object that allows access to member roster in the channel.
   ///
   /// You need to synchronize the channel before you can call this method unless you just joined the channel, in which case it synchronizes automatically.
-  Members? get members {
+  Members get members {
     return _members;
   }
 
   /// Get the current synchronization status for channel.
-  ChannelSynchronizationStatus? get synchronizationStatus {
+  ChannelSynchronizationStatus get synchronizationStatus {
     return _synchronizationStatus;
   }
 
@@ -239,8 +239,8 @@ class Channel {
       map['sid'],
       map['createdBy'],
       map['dateCreated'] != null ? DateTime.parse(map['dateCreated']) : null,
-      EnumToString.fromString(ChannelType.values, map['type']),
-      Attributes.fromMap(map['attributes'].cast<String, dynamic>()),
+      EnumToString.fromString(ChannelType.values, map['type']) ?? ChannelType.PUBLIC,
+      map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null),
     );
     channel._updateFromMap(map);
     return channel;
@@ -453,24 +453,21 @@ class Channel {
 
   /// Update properties from a map.
   void _updateFromMap(Map<String, dynamic> map) {
-    _synchronizationStatus = EnumToString.fromString(ChannelSynchronizationStatus.values, map['synchronizationStatus']);
+    _synchronizationStatus = EnumToString.fromString(ChannelSynchronizationStatus.values, map['synchronizationStatus']) ?? ChannelSynchronizationStatus.NONE;
     if (_synchronizationStatus == ChannelSynchronizationStatus.ALL) {
       _hasSynchronized = true;
     }
 
     if (map['messages'] != null) {
       final messagesMap = Map<String, dynamic>.from(map['messages']);
-      var msgs = _messages;
-      if (msgs != null) {
-        msgs._updateFromMap(messagesMap);
-      }
+      _messages._updateFromMap(messagesMap);
     }
 
     if (map['attributes'] != null) {
       _attributes = Attributes.fromMap(map['attributes'].cast<String, dynamic>());
     }
 
-    _status = EnumToString.fromString(ChannelStatus.values, map['status']);
+    _status = EnumToString.fromString(ChannelStatus.values, map['status']) ?? ChannelStatus.UNKNOWN;
 
     _createdBy ??= map['createdBy'];
     _dateCreated ??= map['dateCreated'] != null ? DateTime.parse(map['dateCreated']) : null;
@@ -481,7 +478,10 @@ class Channel {
 
   /// Parse native channel events to the right event streams.
   void _parseEvents(dynamic event) {
-    final String? eventName = event['name'];
+    if (event['name'] == null) {
+      return;
+    }
+    final String eventName = event['name'];
     TwilioProgrammableChat._log("Channel => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
     final data = Map<String, dynamic>.from(event['data']);
 
@@ -494,10 +494,7 @@ class Channel {
     if (data['message'] != null) {
       final messageMap = Map<String, dynamic>.from(data['message'] as Map<dynamic, dynamic>);
       // TODO(WLFN): should we cache this so we can just use references?
-      var msgs = messages;
-      if (msgs != null) {
-        message = Message._fromMap(messageMap, msgs);
-      }
+      message = Message._fromMap(messageMap, messages);
     }
 
     Member? member;
@@ -531,8 +528,12 @@ class Channel {
       case 'messageUpdated':
         if (message != null && reason != null) {
           _onMessageUpdatedCtrl.add(MessageUpdatedEvent(message, reason));
-        } else {
-          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => Attempting to operate on NULL.");
+        } else if (message == null && reason == null) {
+          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => Both 'message' and 'reason' are NULL.");
+        } else if (message == null) {
+          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => 'message' is NULL.");
+        } else if (reason == null) {
+          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => 'reason' is NULL.");
         }
         break;
       case 'messageDeleted':
@@ -552,8 +553,12 @@ class Channel {
       case 'memberUpdated':
         if (member != null && reason != null) {
           _onMemberUpdatedCtrl.add(MemberUpdatedEvent(member, reason));
-        } else {
-          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => Attempting to operate on NULL.");
+        } else if (member == null && reason == null) {
+          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => Both 'member' and 'reason' are NULL.");
+        } else if (member == null) {
+          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => 'member' is NULL.");
+        } else if (reason == null) {
+          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => 'reason' is NULL.");
         }
         break;
       case 'memberDeleted':

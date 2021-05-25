@@ -8,11 +8,11 @@ class User {
 
   final String _identity;
 
-  bool? _isOnline;
+  bool _isOnline = false;
 
-  bool? _isNotifiable;
+  bool _isNotifiable = false;
 
-  bool? _isSubscribed;
+  bool _isSubscribed = false;
   //#endregion
 
   //#region Public API properties
@@ -28,18 +28,18 @@ class User {
 
   /// Return user's online status, if available,
   // TODO(WLFN): Should probaly be a async method for real time
-  bool? get isOnline {
+  bool get isOnline {
     return _isOnline;
   }
 
   /// Return user's push reachability.
   // TODO(WLFN): Should probaly be a async method for real time
-  bool? get isNotifiable {
+  bool get isNotifiable {
     return _isNotifiable;
   }
 
   /// Check if this user receives real-time status updates.
-  bool? get isSubscribed {
+  bool get isSubscribed {
     return _isSubscribed;
   }
 
@@ -55,7 +55,7 @@ class User {
   factory User._fromMap(Map<String, dynamic> map) {
     var user = User(
       map['identity'],
-      Attributes.fromMap(map['attributes'].cast<String, dynamic>()),
+      map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null),
     );
     user._updateFromMap(map);
     return user;
@@ -75,8 +75,8 @@ class User {
   /// Update properties from a map.
   void _updateFromMap(Map<String, dynamic> map) {
     _friendlyName = map['friendlyName'];
-    _isOnline = map['isOnline'];
-    _isNotifiable = map['isNotifiable'];
-    _isSubscribed = map['isSubscribed'];
+    _isOnline = map['isOnline'] ?? false;
+    _isNotifiable = map['isNotifiable'] ?? false;
+    _isSubscribed = map['isSubscribed'] ?? false;
   }
 }

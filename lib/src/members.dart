@@ -11,7 +11,7 @@ class Members {
   //#region Public API methods
   /// Return channel this member list belongs to.
   Future<Channel?> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient?.channels?.getChannel(_channelSid);
+    var channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
     return channel;
   }
 
