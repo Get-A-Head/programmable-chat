@@ -467,10 +467,12 @@ class Channel {
       _attributes = Attributes.fromMap(map['attributes'].cast<String, dynamic>());
     }
 
-if (map['type'] != null) {
-  final type = EnumToString.fromString(ChannelType.values, map['type']);
-  _type = type != null ? type : _type;
-}
+    if (map['type'] != null) {
+      final type = EnumToString.fromString(ChannelType.values, map['type']);
+      if (type != null) {
+        _type = type;
+      }
+    }
 
     _status = EnumToString.fromString(ChannelStatus.values, map['status']) ?? ChannelStatus.UNKNOWN;
 
