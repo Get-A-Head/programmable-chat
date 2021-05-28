@@ -35,7 +35,7 @@ class Channel {
   //#region Private API properties
   final String _sid;
 
-  final ChannelType _type;
+  ChannelType _type;
 
   Attributes _attributes;
 
