@@ -274,11 +274,11 @@ class ChatClient {
 
   /// Parse native chat client events to the right event streams.
   void _parseEvents(dynamic event) {
-    if (event['name'] == null) {
+    final String? eventName = event['name'];
+    if (eventName == null) {
       TwilioProgrammableChat._log('ChatClient => _parseEvents => eventName is null.');
       return;
     }
-    final String eventName = event['name'];
     TwilioProgrammableChat._log("ChatClient => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
     final data = Map<String, dynamic>.from(event['data'] ?? {});
 
