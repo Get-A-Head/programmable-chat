@@ -485,10 +485,10 @@ class Channel {
 
   /// Parse native channel events to the right event streams.
   void _parseEvents(dynamic event) {
-    if (event['name'] == null) {
+    final String? eventName = event['name'];
+    if (eventName == null) {
       return;
     }
-    final String eventName = event['name'];
     TwilioProgrammableChat._log("Channel => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
     final data = Map<String, dynamic>.from(event['data']);
 
@@ -535,12 +535,8 @@ class Channel {
       case 'messageUpdated':
         if (message != null && reason != null) {
           _onMessageUpdatedCtrl.add(MessageUpdatedEvent(message, reason));
-        } else if (message == null && reason == null) {
-          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => Both 'message' and 'reason' are NULL.");
-        } else if (message == null) {
-          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => 'message' is NULL.");
-        } else if (reason == null) {
-          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => 'reason' is NULL.");
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'messageUpdated' => message: $message, reason: $reason");
         }
         break;
       case 'messageDeleted':
@@ -560,12 +556,8 @@ class Channel {
       case 'memberUpdated':
         if (member != null && reason != null) {
           _onMemberUpdatedCtrl.add(MemberUpdatedEvent(member, reason));
-        } else if (member == null && reason == null) {
-          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => Both 'member' and 'reason' are NULL.");
-        } else if (member == null) {
-          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => 'member' is NULL.");
-        } else if (reason == null) {
-          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => 'reason' is NULL.");
+        } else {
+          TwilioProgrammableChat._log("Channel => case 'memberUpdated' => member: $member, reason: $reason");
         }
         break;
       case 'memberDeleted':
