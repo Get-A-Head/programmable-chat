@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:rxdart/rxdart.dart';
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
 import 'package:twilio_programmable_chat_example/invite/invite_model.dart';

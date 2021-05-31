@@ -57,7 +57,7 @@ class UserDescriptor {
   Future<User?> subscribe() async {
     var identity = _identity;
     if (identity == null) {
-      throw Exception('_identity has null value.');
+      throw Exception('Cannot subscribe User with identity: $identity.');
     }
     final user = await TwilioProgrammableChat.chatClient?.users.getAndSubscribeUser(identity);
     return user;

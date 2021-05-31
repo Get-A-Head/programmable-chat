@@ -4,7 +4,7 @@ class User {
   //#region Private API properties
   String? _friendlyName;
 
-  final Attributes _attributes;
+  Attributes _attributes;
 
   final String _identity;
 
@@ -78,5 +78,6 @@ class User {
     _isOnline = map['isOnline'] ?? false;
     _isNotifiable = map['isNotifiable'] ?? false;
     _isSubscribed = map['isSubscribed'] ?? false;
+    _attributes = map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null);
   }
 }

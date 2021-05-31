@@ -58,7 +58,7 @@ class TwilioProgrammableChat {
         }
       });
     } else if (!native && _loggingStream != null) {
-      await _loggingStream!.cancel();
+      await _loggingStream?.cancel();
       _loggingStream = null;
     }
   }

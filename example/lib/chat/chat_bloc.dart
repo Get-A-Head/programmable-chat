@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'dart:io';
 
@@ -105,7 +107,7 @@ class ChatBloc {
   Future registerForNotifications() async {
     var token;
     if (Platform.isAndroid) {
-      token = await FirebaseMessaging().getToken();
+      token = await FirebaseMessaging.instance.getToken();
     }
     await chatClient.registerForNotification(token);
   }
@@ -113,7 +115,7 @@ class ChatBloc {
   Future unregisterForNotifications() async {
     var token;
     if (Platform.isAndroid) {
-      token = await FirebaseMessaging().getToken();
+      token = await FirebaseMessaging.instance.getToken();
     }
     await chatClient.unregisterForNotification(token);
   }

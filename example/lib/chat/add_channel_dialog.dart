@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
 

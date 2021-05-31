@@ -1,3 +1,5 @@
+// @dart=2.9
+
 class Debug {
   static final Debug _debug = Debug._internal();
 

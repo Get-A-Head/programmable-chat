@@ -11,6 +11,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 part 'attributes.dart';
 part 'channel.dart';
 part 'channel_descriptor.dart';
+part 'channel_events.dart';
 part 'channel_status.dart';
 part 'channel_synchronization_status.dart';
 part 'channel_type.dart';

@@ -370,15 +370,12 @@ class ChatClient {
         }
         break;
       case 'channelUpdated':
-        if (channelMap != null && reason != null) {
-          var sid = channelMap['sid'];
-          if (sid != null) {
-            Channels._updateChannelFromMap(channelMap);
-            _onChannelUpdatedCtrl.add(ChannelUpdatedEvent(
-              Channels._channelsMap[sid]!,
-              reason,
-            ));
-          }
+        if (channelMap != null && channelMap['sid'] != null && reason != null) {
+          Channels._updateChannelFromMap(channelMap);
+          _onChannelUpdatedCtrl.add(ChannelUpdatedEvent(
+            Channels._channelsMap[channelMap['sid']]!,
+            reason,
+          ));
         } else {
           TwilioProgrammableChat._log("ChatClient => case 'channelUpdated' => Attempting to operate on NULL.");
         }
@@ -469,7 +466,7 @@ class ChatClient {
           users.subscribedUsers.removeWhere((u) => u.identity == userMap!['identity']);
           _onUserUnsubscribedCtrl.add(user);
         } else {
-          TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => _users is NULL.");
+          TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => cannot resolve userById: ${userMap['identity']}.");
         }
         break;
       case 'userUpdated':
@@ -501,11 +498,11 @@ class ChatClient {
 
   /// Parse native chat client events to the right event streams.
   void _parseNotificationEvents(dynamic event) {
-    if (event['name'] == null) {
+    final String? eventName = event['name'];
+    if (eventName == null) {
       TwilioProgrammableChat._log('ChatClient => _parseNotificationEvents => eventName is null.');
       return;
     }
-    final String eventName = event['name'];
     TwilioProgrammableChat._log("ChatClient => Event '$eventName' => ${event["data"]}, error: ${event["error"]}");
     final data = Map<String, dynamic>.from(event['data']);
 

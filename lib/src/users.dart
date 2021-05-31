@@ -36,7 +36,7 @@ class Users {
     try {
       final methodData = await TwilioProgrammableChat._methodChannel.invokeMethod('Users#getChannelUserDescriptors', {'channelSid': channelSid});
       final paginatorMap = Map<String, dynamic>.from(methodData);
-      return Paginator<UserDescriptor>._fromMap(paginatorMap, passOn: {'channels': this});
+      return Paginator<UserDescriptor>._fromMap(paginatorMap);
     } on PlatformException catch (err) {
       throw TwilioProgrammableChat._convertException(err);
     }
@@ -68,7 +68,7 @@ class Users {
       if (userMap['identity'] == null) {
         return null;
       }
-      final user = _createOrSubscribeUser(userMap);
+      final user = _findOrCreateSubscribedUser(userMap);
       return user;
     } on PlatformException catch (err) {
       throw TwilioProgrammableChat._convertException(err);
@@ -88,20 +88,21 @@ class Users {
       final List<Map<String, dynamic>> subscribedUsersList = map['subscribedUsers'].map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
       for (final subscribedUserMap in subscribedUsersList) {
         if (subscribedUserMap['identity'] != null) {
-          var subscribedUser = _createOrSubscribeUser(subscribedUserMap);
-          subscribedUser._updateFromMap(subscribedUserMap);
+          var subscribedUser = _findOrCreateSubscribedUser(subscribedUserMap);
         }
       }
     }
   }
 
-  User _createOrSubscribeUser(Map<String, dynamic> map) {
+  User _findOrCreateSubscribedUser(Map<String, dynamic> map) {
     final subscribedUser = _subscribedUsers.firstWhere(
       (c) => c._identity == map['identity'],
       orElse: () => User._fromMap(map),
     );
     if (!_subscribedUsers.contains(subscribedUser)) {
       _subscribedUsers.add(subscribedUser);
+    } else {
+      subscribedUser._updateFromMap(map);
     }
     return subscribedUser;
   }
