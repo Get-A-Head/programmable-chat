@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
 
 class ChannelModel {
@@ -13,7 +11,7 @@ class ChannelModel {
     return copyWith(messages: messageList);
   }
 
-  ChannelModel copyWith({String friendlyName, List<Message> messages}) {
+  ChannelModel copyWith({String? friendlyName, List<Message>? messages}) {
     return ChannelModel(
       friendlyName: friendlyName ?? this.friendlyName,
       messages: messages ?? this.messages,

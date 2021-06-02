@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +10,8 @@ class JoinForm extends StatefulWidget {
   final JoinBloc joinBloc;
 
   const JoinForm({
-    Key key,
-    @required this.joinBloc,
+    Key? key,
+    required this.joinBloc,
   }) : super(key: key);
 
   static Widget create(BuildContext context) {
@@ -35,7 +33,7 @@ class JoinForm extends StatefulWidget {
 
 class _JoinFormState extends State<JoinForm> {
   final TextEditingController _nameController = TextEditingController();
-  VoidCallback _listener;
+  late VoidCallback _listener;
 
   @override
   void initState() {
@@ -61,7 +59,7 @@ class _JoinFormState extends State<JoinForm> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _buildChildren(joinModel),
+              children: _buildChildren(joinModel ?? JoinModel()),
             ),
           );
         });
@@ -97,13 +95,13 @@ class _JoinFormState extends State<JoinForm> {
             onPressed: chatModel.canSubmit && !chatModel.isLoading ? _submit : null,
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                return Theme.of(context).appBarTheme?.textTheme?.headline6?.color ?? Colors.white;
+                return Theme.of(context).appBarTheme.textTheme?.headline6?.color ?? Colors.white;
               }),
               backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
                 if (states.contains(MaterialState.disabled)) {
                   return Colors.grey.shade300;
                 } else {
-                  return Theme.of(context).appBarTheme?.color ?? Theme.of(context).primaryColor;
+                  return Theme.of(context).appBarTheme.color ?? Theme.of(context).primaryColor;
                 }
               }),
             ),

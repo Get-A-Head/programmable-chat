@@ -1,18 +1,11 @@
-// @dart=2.9
-
-import 'package:flutter/foundation.dart';
-
 class TwilioChatTokenRequest {
-  final String identity;
+  final String? identity;
 
   TwilioChatTokenRequest({
-    @required this.identity,
+    required this.identity,
   });
 
   factory TwilioChatTokenRequest.fromMap(Map<String, dynamic> data) {
-    if (data == null) {
-      return null;
-    }
     return TwilioChatTokenRequest(
       identity: data['identity'],
     );

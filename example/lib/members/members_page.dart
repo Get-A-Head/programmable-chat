@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +7,7 @@ import 'package:twilio_programmable_chat_example/members/members_bloc.dart';
 class MembersPage extends StatefulWidget {
   final MembersBloc membersBloc;
 
-  MembersPage({this.membersBloc});
+  MembersPage({required this.membersBloc});
 
   @override
   State<StatefulWidget> createState() => MembersPageState();
@@ -56,7 +54,7 @@ class MembersPageState extends State<MembersPage> {
       stream: widget.membersBloc.membersStream,
       initialData: MemberData(),
       builder: (BuildContext context, AsyncSnapshot<MemberData> snapshot) {
-        var memberData = snapshot.data;
+        var memberData = snapshot.data ?? MemberData();
         return ListView.builder(
           itemCount: memberData.members.length,
           itemBuilder: (BuildContext context, int index) {
@@ -68,7 +66,7 @@ class MembersPageState extends State<MembersPage> {
                   userDescriptor?.isOnline ?? false ? Icons.person : Icons.perm_identity,
                   color: userDescriptor?.isOnline ?? false ? Colors.green : Colors.grey,
                 ),
-                Text(member.identity)
+                Text(member.identity ?? '')
               ],
             );
           },

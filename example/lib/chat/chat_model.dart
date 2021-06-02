@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
 
 class ChatModel {
@@ -14,9 +12,9 @@ class ChatModel {
   });
 
   ChatModel copyWith({
-    bool isLoading,
-    List<ChannelDescriptor> publicChannels,
-    List<ChannelDescriptor> userChannels,
+    bool? isLoading,
+    List<ChannelDescriptor>? publicChannels,
+    List<ChannelDescriptor>? userChannels,
   }) {
     return ChatModel(
       isLoading: isLoading ?? this.isLoading,

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
@@ -13,15 +11,15 @@ class ChatPage extends StatefulWidget {
   final ChatBloc chatBloc;
 
   const ChatPage({
-    Key key,
-    @required this.chatBloc,
+    Key? key,
+    required this.chatBloc,
   }) : super(key: key);
 
   static Widget create(BuildContext context, JoinModel joinModel) {
     return Provider<ChatBloc>(
       create: (BuildContext context) => ChatBloc(
-        myIdentity: joinModel.identity,
-        chatClient: joinModel.chatClient,
+        myIdentity: joinModel.identity ?? '',
+        chatClient: joinModel.chatClient ?? ChatClient(joinModel.identity ?? ''),
       ),
       dispose: (BuildContext context, ChatBloc chatBloc) => chatBloc.dispose(),
       child: Consumer<ChatBloc>(
@@ -100,7 +98,7 @@ class _ChatPageState extends State<ChatPage> {
         initialData: ChatModel(isLoading: true),
         stream: widget.chatBloc.channelDescriptorStream,
         builder: (BuildContext context, AsyncSnapshot<ChatModel> snapshot) {
-          var chatModel = snapshot.data;
+          var chatModel = snapshot.data ?? ChatModel(isLoading: true);
           var publicChannels = chatModel.publicChannels.where((publicChannel) => !chatModel.userChannels.any((userChannel) => userChannel.sid == publicChannel.sid)).toList();
           var channels = [...chatModel.userChannels, ...publicChannels];
 
@@ -117,7 +115,7 @@ class _ChatPageState extends State<ChatPage> {
                 itemCount: channels.length,
                 itemBuilder: (BuildContext context, int index) {
                   var channelDescriptor = channels[index];
-                  return _buildChannel(channelDescriptor, widget.chatBloc.channelStatusMap[channelDescriptor.sid]);
+                  return _buildChannel(channelDescriptor, widget.chatBloc.channelStatusMap[channelDescriptor.sid] ?? ChannelStatus.UNKNOWN);
                 },
               )
             ],
@@ -136,7 +134,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(channel.friendlyName, style: TextStyle(fontSize: 16.0)),
+                Text(channel.friendlyName ?? '', style: TextStyle(fontSize: 16.0)),
                 Row(
                   children: <Widget>[
                     Text('Members: ${channel.membersCount}'),
@@ -184,6 +182,9 @@ class _ChatPageState extends State<ChatPage> {
 
   Future _joinChannel(ChannelDescriptor channelDescriptor) async {
     var channel = await channelDescriptor.getChannel();
+    if (channel == null) {
+      return;
+    }
     if (channel.status != ChannelStatus.JOINED) {
       await widget.chatBloc.joinChannel(channel);
     }

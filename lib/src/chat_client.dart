@@ -377,7 +377,7 @@ class ChatClient {
             reason,
           ));
         } else {
-          TwilioProgrammableChat._log("ChatClient => case 'channelUpdated' => Attempting to operate on NULL.");
+          TwilioProgrammableChat._log("ChatClient => case 'channelUpdated' => channelMap: $channelMap, reason: $reason");
         }
         break;
       case 'clientSynchronization':
@@ -417,7 +417,7 @@ class ChatClient {
         if (channelSid != null && messageSid != null && messageIndex != null) {
           _onNewMessageNotificationCtrl.add(NewMessageNotificationEvent(channelSid, messageSid, messageIndex));
         } else {
-          TwilioProgrammableChat._log("ChatClient => case 'newMessageNotification' => Attempting to operate on NULL.");
+          TwilioProgrammableChat._log("ChatClient => case 'newMessageNotification' => channelSid: $channelSid, messageSid: $messageSid, messageIndex: $messageIndex");
         }
         break;
       case 'notificationFailed':
@@ -457,7 +457,7 @@ class ChatClient {
         break;
       case 'userUnsubscribed':
         if (userMap == null) {
-          TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => Attempting to operate on NULL.");
+          TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => userMap is NULL.");
           return;
         }
         var user = users.getUserById(userMap['identity']);
@@ -471,13 +471,7 @@ class ChatClient {
         break;
       case 'userUpdated':
         if (userMap == null || reason == null) {
-          if (userMap == null && reason == null) {
-            TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => Both 'userMap' and 'reason' are NULL.");
-          } else if (userMap == null) {
-            TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => 'userMap' is NULL.");
-          } else if (reason == null) {
-            TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => 'reason' is NULL.");
-          }
+          TwilioProgrammableChat._log("ChatClient => case 'userUpdated' => userMap: $userMap, reason: $reason");
           return;
         }
         users._updateFromMap({

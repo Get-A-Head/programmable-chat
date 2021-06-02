@@ -11,14 +11,14 @@ class Paginator<T> {
 
   final String _pageId;
 
-  final List<T?> _items = [];
+  final List<T> _items = [];
 
   final int _pageSize;
 
   final bool _hasNextPage;
 
   /// Get items available in the current page.
-  List<T?> get items {
+  List<T> get items {
     return [..._items];
   }
 
@@ -67,6 +67,12 @@ class Paginator<T> {
             item = (_items as List<ChannelDescriptor>).firstWhere(
               (c) => c._sid == itemMap['sid'],
               orElse: () => ChannelDescriptor._fromMap(itemMap),
+            );
+            break;
+          case 'userDescriptor':
+            item = (_items as List<UserDescriptor>).firstWhere(
+              (c) => c._identity == itemMap['identity'],
+              orElse: () => UserDescriptor._fromMap(itemMap),
             );
             break;
         }

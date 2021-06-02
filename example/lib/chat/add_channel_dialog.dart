@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
 
@@ -10,7 +8,7 @@ class AddChannelDialog extends StatefulWidget {
 
 class _AddChannelDialogState extends State<AddChannelDialog> {
   final _controller = TextEditingController();
-  var _channelType = ChannelType.PUBLIC;
+  ChannelType _channelType = ChannelType.PUBLIC;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +44,9 @@ class _AddChannelDialogState extends State<AddChannelDialog> {
                       title: const Text('Public'),
                       selected: _channelType == ChannelType.PUBLIC,
                       onChanged: (type) => setState(() {
-                        _channelType = type;
+                        if (type != null) {
+                          _channelType = type;
+                        }
                       }),
                     ),
                   ),
@@ -59,7 +59,9 @@ class _AddChannelDialogState extends State<AddChannelDialog> {
                       title: const Text('Private'),
                       selected: _channelType == ChannelType.PRIVATE,
                       onChanged: (type) => setState(() {
-                        _channelType = type;
+                        if (type != null) {
+                          _channelType = type;
+                        }
                       }),
                     ),
                   ),

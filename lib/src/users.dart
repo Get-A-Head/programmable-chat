@@ -88,7 +88,7 @@ class Users {
       final List<Map<String, dynamic>> subscribedUsersList = map['subscribedUsers'].map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
       for (final subscribedUserMap in subscribedUsersList) {
         if (subscribedUserMap['identity'] != null) {
-          var subscribedUser = _findOrCreateSubscribedUser(subscribedUserMap);
+          _findOrCreateSubscribedUser(subscribedUserMap);
         }
       }
     }

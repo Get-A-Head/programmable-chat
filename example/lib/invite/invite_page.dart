@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
@@ -9,7 +7,7 @@ import 'package:twilio_programmable_chat_example/invite/invite_model.dart';
 class InvitePage extends StatefulWidget {
   final InviteBloc inviteBloc;
 
-  InvitePage({this.inviteBloc});
+  InvitePage({required this.inviteBloc});
 
   @override
   State<StatefulWidget> createState() => InvitePageState();
@@ -49,7 +47,7 @@ class InvitePageState extends State<InvitePage> {
       stream: widget.inviteBloc.inviteStream,
       initialData: InviteModel(),
       builder: (BuildContext context, AsyncSnapshot<InviteModel> snapshot) {
-        var model = snapshot.data;
+        var model = snapshot.data ?? InviteModel();
         if (model.isLoading) {
           return Center(child: CircularProgressIndicator());
         } else {
@@ -61,7 +59,7 @@ class InvitePageState extends State<InvitePage> {
                 onTap: () => widget.inviteBloc.inviteToChannel(member),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(member.identity),
+                  child: Text(member.identity ?? ''),
                 ),
               );
             },

@@ -21,9 +21,7 @@ class Members {
     });
     if (membersListData['membersList'] != null) {
       return membersListData['membersList'].map<Member>((m) {
-        if (m == null) {
-          return null;
-        } else {
+        if (m != null) {
           return Member._fromMap(m.cast<String, dynamic>());
         }
       }).toList();

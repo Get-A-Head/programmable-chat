@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:twilio_programmable_chat_example/join/join_form.dart';
 
