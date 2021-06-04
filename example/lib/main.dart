@@ -28,34 +28,40 @@ void main() {
 
 void _configureNotifications() {
   if (Platform.isAndroid) {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Main::FirebaseMessaging.onMessage => ${message.data}');
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Main::FirebaseMessaging.onMessageOpenedApp => ${message.data}');
-    });
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      print('Main::FirebaseMessaging.onBackgroundMessage => ${message.data}');
-      var notification = message.notification;
-      if (notification != null) {
-        await FlutterLocalNotificationsPlugin().show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              '0',
-              'Chat',
-              'Twilio Chat Channel 0',
-              importance: Importance.high,
-              priority: Priority.defaultPriority,
-              showWhen: true,
-            ),
-          ),
-          payload: jsonEncode(message),
-        );
-      }
-    });
+    FirebaseMessaging.onMessage.listen(onMessageHandling);
+    FirebaseMessaging.onMessageOpenedApp.listen(onMessageOpenedAppHandling);
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessageHandling);
+  }
+}
+
+Future<void> onMessageHandling(RemoteMessage message) async {
+  print('Main::FirebaseMessaging.onMessage => ${message.data}');
+}
+
+Future<void> onMessageOpenedAppHandling(RemoteMessage message) async {
+  print('Main::FirebaseMessaging.onMessageOpenedApp => ${message.data}');
+}
+
+Future<void> onBackgroundMessageHandling(RemoteMessage message) async {
+  print('Main::FirebaseMessaging.onBackgroundMessage => ${message.data}');
+  var notification = message.notification;
+  if (notification != null) {
+    await FlutterLocalNotificationsPlugin().show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          '0',
+          'Chat',
+          'Twilio Chat Channel 0',
+          importance: Importance.high,
+          priority: Priority.defaultPriority,
+          showWhen: true,
+        ),
+      ),
+      payload: jsonEncode(message),
+    );
   }
 }
 //#endregion
@@ -64,7 +70,7 @@ class TwilioProgrammableChatExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<BackendService>(
-      create: (_) => twilioFirebaseFunctions.instance,
+      create: (_) => TwilioFirebaseFunctions.instance,
       child: MaterialApp(
         title: 'Twilio Programmable Chat',
         theme: ThemeData(

@@ -38,24 +38,23 @@ class InviteBloc {
     }
   }
 
-  Future _handlePagination(
+  Future<Map<String, Member>> _handlePagination(
     Paginator<ChannelDescriptor> paginator,
     List<String?> membersIdsForCurrentChannel,
-    Map<String?, Member> membersMap,
+    Map<String, Member> membersMap,
   ) async {
     for (var channelDescriptor in paginator.items) {
-      var _membersCount = channelDescriptor.membersCount;
-      if (_membersCount == null) {
+      var uMembersCount = channelDescriptor.membersCount;
+      if (uMembersCount == null || uMembersCount <= 0) {
         continue;
       }
-      if (_membersCount > 0) {
-        var channel = await channelDescriptor.getChannel();
-        var members = await channel?.members.getMembersList();
-        if (members != null) {
-          for (var member in members) {
-            if (member.identity != myIdentity && !membersIdsForCurrentChannel.contains(member.identity) && !membersMap.keys.contains(member.identity)) {
-              membersMap[member.identity] = member;
-            }
+      var channel = await channelDescriptor.getChannel();
+      var members = await channel?.members.getMembersList();
+      if (members != null) {
+        for (var member in members) {
+          var uIdentity = member.identity;
+          if (uIdentity != null && uIdentity != myIdentity && !membersIdsForCurrentChannel.contains(uIdentity) && !membersMap.keys.contains(uIdentity)) {
+            membersMap[uIdentity] = member;
           }
         }
       }

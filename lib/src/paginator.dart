@@ -80,7 +80,9 @@ class Paginator<T> {
           if (!_items.contains(item)) {
             _items.add(item);
           }
-          item._updateFromMap(itemMap);
+          if (_itemType == 'channelDescriptor') {
+            item._updateFromMap(itemMap);
+          }
         }
       }
     }
