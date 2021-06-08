@@ -31,7 +31,7 @@ public class ChatClientMethods {
         disposeListeners()
         result(nil)
     }
-    
+
     private static func disposeListeners() {
         SwiftTwilioProgrammableChatPlugin.chatListener = nil
         SwiftTwilioProgrammableChatPlugin.channelListeners.removeAll()

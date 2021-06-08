@@ -36,7 +36,7 @@ public class SwiftTwilioProgrammableChatPlugin: NSObject, FlutterPlugin {
     private var methodChannel: FlutterMethodChannel?
 
     private var chatChannel: FlutterEventChannel?
-    
+
     private var channelEventChannel: FlutterEventChannel?
 
     private var mediaProgressChannel: FlutterEventChannel?
@@ -61,7 +61,7 @@ public class SwiftTwilioProgrammableChatPlugin: NSObject, FlutterPlugin {
 
         channelEventChannel = FlutterEventChannel(name: "twilio_programmable_chat/channel", binaryMessenger: registrar.messenger())
         channelEventChannel?.setStreamHandler(ChannelStreamHandler())
-        
+
         mediaProgressChannel = FlutterEventChannel(
             name: "twilio_programmable_chat/media_progress", binaryMessenger: registrar.messenger())
         mediaProgressChannel?.setStreamHandler(MediaProgressStreamHandler())
@@ -166,7 +166,7 @@ public class SwiftTwilioProgrammableChatPlugin: NSObject, FlutterPlugin {
             return nil
         }
     }
-    
+
     class MediaProgressStreamHandler: NSObject, FlutterStreamHandler {
         func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
             debug("MediaProgressStreamHandler.onListen => MediaProgress eventChannel attached")
