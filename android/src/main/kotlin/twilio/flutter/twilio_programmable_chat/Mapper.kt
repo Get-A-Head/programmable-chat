@@ -13,7 +13,6 @@ import com.twilio.chat.Paginator
 import com.twilio.chat.User
 import com.twilio.chat.UserDescriptor
 import com.twilio.chat.Users
-import io.flutter.plugin.common.EventChannel
 import java.text.SimpleDateFormat
 import java.util.Date
 import org.json.JSONArray
