@@ -252,9 +252,9 @@ class ChatClient {
   /// Unregisters for push notifications.  Uses APNs on iOS and FCM on Android.
   ///
   /// Token is only used on Android. iOS implementation retrieves APNs token itself.
-  Future<void> unregisterForNotification(String token) async {
+  Future<void> unregisterForNotification(String? token) async {
     try {
-      await TwilioProgrammableChat._methodChannel.invokeMethod('unregisterForNotification', <String, Object>{'token': token});
+      await TwilioProgrammableChat._methodChannel.invokeMethod('unregisterForNotification', <String, Object?>{'token': token});
     } on PlatformException catch (err) {
       throw TwilioProgrammableChat._convertException(err);
     }
