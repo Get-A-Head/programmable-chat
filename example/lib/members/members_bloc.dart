@@ -6,16 +6,15 @@ import 'package:twilio_programmable_chat/twilio_programmable_chat.dart';
 class MembersBloc {
   ChatClient chatClient;
   ChannelDescriptor channelDescriptor;
-  late Channel channel;
 
   late BehaviorSubject<MemberData> _membersSubject;
   late ValueStream<MemberData> membersStream;
 
   late List<StreamSubscription> _subscriptions;
   StreamSubscription? _channelSyncSubscription;
-  final Map<String?, UserDescriptor> _userDescriptorMap = {};
+  final Map<String, UserDescriptor> _userDescriptorMap = {};
 
-  Map<String?, UserDescriptor> get userDescriptorMap => _userDescriptorMap;
+  Map<String, UserDescriptor> get userDescriptorMap => _userDescriptorMap;
 
   MembersBloc({required this.chatClient, required this.channelDescriptor}) {
     _membersSubject = BehaviorSubject<MemberData>();
@@ -27,8 +26,6 @@ class MembersBloc {
     channelDescriptor.getChannel().then((channel) {
       var _channel = channel;
       if (_channel != null) {
-        this.channel = _channel;
-
         if (_channel.hasSynchronized) {
           _getMembers();
         } else {
@@ -58,7 +55,10 @@ class MembersBloc {
     if (membersList != null) {
       for (var member in membersList) {
         final userDescriptor = await member.getUserDescriptor();
-        _userDescriptorMap[member.sid] = userDescriptor;
+        var sid = member.sid;
+        if (sid != null) {
+          _userDescriptorMap[sid] = userDescriptor;
+        }
       }
       _membersSubject.add(MemberData(members: membersList, userDescriptors: _userDescriptorMap));
     }
@@ -68,7 +68,10 @@ class MembersBloc {
     var memberData = _membersSubject.value;
     var userDescriptor = await member.getUserDescriptor();
     memberData.members.add(member);
-    memberData.userDescriptors[member.sid] = userDescriptor;
+    var sid = member.sid;
+    if (sid != null) {
+      memberData.userDescriptors[sid] = userDescriptor;
+    }
     _membersSubject.add(memberData);
   }
 
@@ -77,7 +80,10 @@ class MembersBloc {
     var userDescriptor = await event.member.getUserDescriptor();
     var memberIndex = memberData.members.indexWhere((m) => m.sid == event.member.sid);
     memberData.members[memberIndex] = event.member;
-    memberData.userDescriptors[event.member.sid] = userDescriptor;
+    var sid = event.member.sid;
+    if (sid != null) {
+      memberData.userDescriptors[sid] = userDescriptor;
+    }
     _membersSubject.add(memberData);
   }
 
@@ -97,7 +103,7 @@ class MembersBloc {
 
 class MemberData {
   List<Member> members;
-  Map<String?, UserDescriptor> userDescriptors;
+  Map<String, UserDescriptor> userDescriptors;
 
   MemberData({
     this.members = const <Member>[],

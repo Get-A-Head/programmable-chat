@@ -78,6 +78,6 @@ class User {
     _isOnline = map['isOnline'] ?? false;
     _isNotifiable = map['isNotifiable'] ?? false;
     _isSubscribed = map['isSubscribed'] ?? false;
-    _attributes = map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null);
+    _attributes = map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : _attributes;
   }
 }

@@ -239,20 +239,17 @@ class _ChannelPageState extends State<ChannelPage> {
   }
 
   bool doesNameExist(Message message) {
-    var _json = message.attributes.getJSONObject();
-    if (_json == null) {
-      return false;
-    }
-    return _json.containsKey('name');
+    var uJson = message.attributes.getJSONObject();
+    return message.attributes.type == AttributesType.OBJECT && uJson != null && uJson.containsKey('name');
   }
 
   Widget _showImage(File? file) {
-    var _file = file;
-    if (_file == null) {
+    var uFile = file;
+    if (uFile == null) {
       return Text('file variable is null.');
     }
     return Image.file(
-      _file,
+      uFile,
       height: 200,
       width: 200,
     );

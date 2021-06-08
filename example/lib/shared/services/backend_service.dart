@@ -7,10 +7,10 @@ abstract class BackendService {
   Future<TwilioChatTokenResponse> createToken(TwilioChatTokenRequest twilioChatTokenRequest);
 }
 
-class twilioFirebaseFunctions implements BackendService {
-  twilioFirebaseFunctions._();
+class TwilioFirebaseFunctions implements BackendService {
+  TwilioFirebaseFunctions._();
 
-  static final instance = twilioFirebaseFunctions._();
+  static final instance = TwilioFirebaseFunctions._();
 
   @override
   Future<TwilioChatTokenResponse> createToken(TwilioChatTokenRequest twilioChatTokenRequest) async {

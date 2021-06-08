@@ -53,30 +53,30 @@ class ChannelBloc {
   }
 
   Future _subscribeToChannel() async {
-    var _channel = channel;
-    if (_channel == null) {
+    var uChannel = channel;
+    if (uChannel == null) {
       return;
     }
     print('ChannelBloc::subscribeToChannel');
-    if (_channel.hasSynchronized) {
-      await _getMessages(_channel);
+    if (uChannel.hasSynchronized) {
+      await _getMessages(uChannel);
     }
 
-    _subscriptions.add(_channel.onSynchronizationChanged.listen((event) async {
+    _subscriptions.add(uChannel.onSynchronizationChanged.listen((event) async {
       if (event.synchronizationStatus == ChannelSynchronizationStatus.ALL) {
         await _getMessages(event);
       }
     }));
-    _subscriptions.add(_channel.onMessageAdded.listen((Message message) {
+    _subscriptions.add(uChannel.onMessageAdded.listen((Message message) {
       _messageSubject.add(_messageSubject.value.addMessage(message));
       if (message.hasMedia) {
         _getImage(message);
       }
     }));
-    _subscriptions.add(_channel.onTypingStarted.listen((TypingEvent event) {
+    _subscriptions.add(uChannel.onTypingStarted.listen((TypingEvent event) {
       _typingSubject.add(event.member.identity);
     }));
-    _subscriptions.add(_channel.onTypingEnded.listen((TypingEvent event) {
+    _subscriptions.add(uChannel.onTypingEnded.listen((TypingEvent event) {
       _typingSubject.add(null);
     }));
   }
@@ -94,8 +94,8 @@ class ChannelBloc {
   }
 
   Future _updateLastConsumedMessageIndex(Channel channel, List<Message> messages) async {
-    var lastConsumedMessageIndex = messages.isNotEmpty ? messages.last.messageIndex : 0;
-    await channel.messages.setLastConsumedMessageIndexWithResult(lastConsumedMessageIndex ?? 0);
+    var lastConsumedMessageIndex = messages.isNotEmpty && messages.last.messageIndex != null ? messages.last.messageIndex : 0;
+    await channel.messages.setLastConsumedMessageIndexWithResult(lastConsumedMessageIndex!);
   }
 
   Future sendMessage() async {
@@ -120,21 +120,21 @@ class ChannelBloc {
   }
 
   Future leaveChannel() async {
-    var _channel = channel;
-    if (_channel == null) {
+    var uChannel = channel;
+    if (uChannel == null) {
       return;
     }
-    if (_channel.type == ChannelType.PUBLIC) {
-      return _channel.leave();
+    if (uChannel.type == ChannelType.PUBLIC) {
+      return uChannel.leave();
     } else {
-      await _channel.leave();
-      return _channel.destroy();
+      await uChannel.leave();
+      return uChannel.destroy();
     }
   }
 
   Future _getImage(Message message) async {
-    var _messageMedia = message.media;
-    if (_messageMedia == null) {
+    var uMessageMedia = message.media;
+    if (uMessageMedia == null) {
       return;
     }
     var subject = BehaviorSubject<MediaModel>();
@@ -145,13 +145,13 @@ class ChannelBloc {
       var tempDir = await getTemporaryDirectory();
       tempDirPath = tempDir.path;
     }
-    var _fileName = _messageMedia.fileName;
+    var uFileName = uMessageMedia.fileName;
     var path = '$tempDirPath/'
-        '${(_fileName != null && _fileName.isNotEmpty) ? _fileName : _messageMedia.sid}.'
-        '${extensionFromMime(_messageMedia.type)}';
+        '${(uFileName != null && uFileName.isNotEmpty) ? uFileName : uMessageMedia.sid}.'
+        '${extensionFromMime(uMessageMedia.type)}';
     var outputFile = File(path);
 
-    await _messageMedia.download(outputFile);
+    await uMessageMedia.download(outputFile);
     subject.add(subject.value.copyWith(isLoading: false, file: outputFile));
   }
 

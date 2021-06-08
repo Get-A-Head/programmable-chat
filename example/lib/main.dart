@@ -76,7 +76,7 @@ class TwilioProgrammableChatExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider<BackendService>(
-      create: (_) => twilioFirebaseFunctions.instance,
+      create: (_) => TwilioFirebaseFunctions.instance,
       child: MaterialApp(
         title: 'Twilio Programmable Chat',
         theme: ThemeData(
