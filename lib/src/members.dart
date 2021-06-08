@@ -20,11 +20,12 @@ class Members {
       'channelSid': _channelSid,
     });
     if (membersListData['membersList'] != null) {
-      return membersListData['membersList'].map<Member>((m) {
-        if (m != null) {
-          return Member._fromMap(m.cast<String, dynamic>());
-        }
-      }).toList();
+      var membersListFiltered = membersListData['membersList'].where((m) => m != null);
+      var membersMap = membersListFiltered.map<Member>((m) {
+        return Member._fromMap(m.cast<String, dynamic>());
+      });
+      var membersList = membersMap.toList();
+      return membersList;
     } else {
       return null;
     }

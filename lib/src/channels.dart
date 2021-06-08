@@ -104,9 +104,7 @@ class Channels {
   ///
   /// Each cached channel reference will be disposed and removed from the cache.
   static Future<void> _shutdown() async {
-    _channelsMap.forEach((key, channel) async {
-      _channelsMap.remove(key);
-    });
+    _channelsMap.clear();
   }
 
   /// Update properties from a map.
