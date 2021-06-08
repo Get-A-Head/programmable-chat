@@ -3,7 +3,7 @@ part of twilio_programmable_chat;
 /// Represents options when connecting to a [ChatClient].
 class Properties {
   //#region Private API properties
-  String _region;
+  final String _region;
   //#endregion
 
   //#region Public API properties

@@ -9,18 +9,11 @@ class Channels {
   //#region Public API properties
   /// Request list of user's joined channels.
   List<Channel> get subscribedChannels {
-    return _channelsMap.values.where((channel) => channel._isSubscribed).toList();
+    return _channelsMap.values.where((channel) => channel.isSubscribed).toList();
   }
   //#endregion
 
   Channels();
-
-  /// Construct from a map.
-  factory Channels._fromMap(Map<String, dynamic> map) {
-    var channels = Channels();
-    channels._updateFromMap(map);
-    return channels;
-  }
 
   //#region Public API methods
   /// Create a [Channel] with friendly name and type.
@@ -121,11 +114,11 @@ class Channels {
     //TODO: update naming and utilization of this method
     if (map['subscribedChannels'] != null) {
       final List<Map<String, dynamic>> subscribedChannelsList = map['subscribedChannels'].map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
-      _channelsMap.values.forEach((channel) => channel._isSubscribed = false);
+      _channelsMap.values.forEach((channel) => channel._setSubscribed(false));
       for (final subscribedChannelMap in subscribedChannelsList) {
         var sid = subscribedChannelMap['sid'];
         _updateChannelFromMap(subscribedChannelMap);
-        _channelsMap[sid]?._isSubscribed = true;
+        _channelsMap[sid]?._setSubscribed(true);
       }
     }
   }
@@ -140,7 +133,7 @@ class Channels {
     if (sid != null) {
       if (!_channelsMap.containsKey(sid)) {
         _channelsMap[sid] = Channel._fromMap(channelMap);
-        _channelsMap[sid]?._isSubscribed = false;
+        _channelsMap[sid]?._setSubscribed(false);
       } else {
         _channelsMap[sid]?._updateFromMap(channelMap);
       }

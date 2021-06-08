@@ -109,6 +109,10 @@ class Channel {
   bool get hasSynchronized {
     return _hasSynchronized;
   }
+
+  bool get isSubscribed {
+    return _isSubscribed;
+  }
   //#endregion
 
   //#region Message events
@@ -407,6 +411,11 @@ class Channel {
     }
   }
   //#endregion
+
+  /// Update _isSubscribed
+  void _setSubscribed(bool subscribed) {
+    _isSubscribed = subscribed;
+  }
 
   /// Update properties from a map.
   void _updateFromMap(Map<String, dynamic> map) {

@@ -22,13 +22,6 @@ class Users {
 
   Users();
 
-  /// Construct from a map.
-  factory Users._fromMap(Map<String, dynamic> map) {
-    var users = Users();
-    users._updateFromMap(map);
-    return users;
-  }
-
   /// Get paginated user descriptors from a given channel.
   ///
   /// This is a convenience function allowing to query user list in a channel. The returned paginator can be used to iterate full user list in the channel roster.
