@@ -4,7 +4,9 @@ part of twilio_programmable_chat;
 class TwilioProgrammableChat {
   static const MethodChannel _methodChannel = MethodChannel('twilio_programmable_chat');
 
-  static const EventChannel _chatChannel = EventChannel('twilio_programmable_chat/room');
+  static const EventChannel _chatChannel = EventChannel('twilio_programmable_chat/chat');
+
+  static const EventChannel _channelEventChannel = EventChannel('twilio_programmable_chat/channel');
 
   static const EventChannel _mediaProgressChannel = EventChannel('twilio_programmable_chat/media_progress');
 

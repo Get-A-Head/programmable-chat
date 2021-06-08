@@ -20,27 +20,35 @@ class ChatBloc {
   ChatBloc({required this.myIdentity, required this.chatClient}) {
     _channelDescriptorController = BehaviorSubject<ChatModel>();
     _subscriptions.add(chatClient.onChannelAdded.listen((event) {
+      print('ChatBloc => chatClient.onChannelAdded => $event');
       retrieve();
     }));
     _subscriptions.add(chatClient.onChannelDeleted.listen((event) {
+      print('ChatBloc => chatClient.onChannelDeleted => $event');
       retrieve();
     }));
     _subscriptions.add(chatClient.onChannelUpdated.listen((event) {
+      print('ChatBloc => chatClient.onChannelUpdated => $event');
       retrieve();
     }));
     _subscriptions.add(chatClient.onChannelSynchronizationChange.listen((event) {
+      print('ChatBloc => chatClient.onChannelSynchronizationChange => $event');
       retrieve();
     }));
     _subscriptions.add(chatClient.onChannelInvited.listen((event) {
+      print('ChatBloc => chatClient.onChannelInvited => $event');
       retrieve();
     }));
     _subscriptions.add(chatClient.onNotificationRegistered.listen((event) {
+      print('ChatBloc => chatClient.onNotificationRegistered => $event');
       // Do things
     }));
     _subscriptions.add(chatClient.onNotificationDeregistered.listen((event) {
+      print('ChatBloc => chatClient.onNotificationDeregistered => $event');
       // Do things
     }));
     _subscriptions.add(chatClient.onNotificationFailed.listen((event) {
+      print('ChatBloc => chatClient.onNotificationFailed => $event');
       // Do things
     }));
   }

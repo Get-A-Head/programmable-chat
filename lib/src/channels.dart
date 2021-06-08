@@ -112,7 +112,6 @@ class Channels {
   /// Each cached channel reference will be disposed and removed from the cache.
   static Future<void> _shutdown() async {
     _channelsMap.forEach((key, channel) async {
-      await channel._dispose();
       _channelsMap.remove(key);
     });
   }
@@ -129,6 +128,10 @@ class Channels {
         _channelsMap[sid]?._isSubscribed = true;
       }
     }
+  }
+
+  void _routeChannelEvent(String channelSid, dynamic event) {
+    _channelsMap[channelSid]?._parseEvents(event);
   }
 
   /// Update individual channel from a map.

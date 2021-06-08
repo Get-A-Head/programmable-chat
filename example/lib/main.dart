@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,7 +14,7 @@ import 'package:twilio_programmable_chat_example/shared/services/backend_service
 void main() {
   Debug.enabled = true;
   WidgetsFlutterBinding.ensureInitialized();
-  _configureNotifications();
+  Firebase.initializeApp().then((value) => _configureNotifications());
   SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
@@ -28,34 +29,45 @@ void main() {
 
 void _configureNotifications() {
   if (Platform.isAndroid) {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Main::FirebaseMessaging.onMessage => ${message.data}');
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Main::FirebaseMessaging.onMessageOpenedApp => ${message.data}');
-    });
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      print('Main::FirebaseMessaging.onBackgroundMessage => ${message.data}');
-      var notification = message.notification;
-      if (notification != null) {
-        await FlutterLocalNotificationsPlugin().show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              '0',
-              'Chat',
-              'Twilio Chat Channel 0',
-              importance: Importance.high,
-              priority: Priority.defaultPriority,
-              showWhen: true,
-            ),
-          ),
-          payload: jsonEncode(message),
-        );
-      }
-    });
+    FlutterLocalNotificationsPlugin().initialize(
+      InitializationSettings(
+        android: AndroidInitializationSettings('icon_192'),
+      ),
+    );
+    FirebaseMessaging.onMessage.listen(onMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(onMessageOpenedApp);
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+  }
+}
+
+void onMessage(RemoteMessage message) {
+  print('Main::FirebaseMessaging.onMessage => ${message.data}');
+}
+
+void onMessageOpenedApp(RemoteMessage message) {
+  print('Main::FirebaseMessaging.onMessageOpenedApp => ${message.data}');
+}
+
+Future onBackgroundMessage(RemoteMessage message) async {
+  print('Main::FirebaseMessaging.onBackgroundMessage => ${message.data}');
+  var data = Map<String, dynamic>.from(message.data);
+  if (data['message_index'] != null && data['channel_title'] != null && data['twi_body'] != null) {
+    await FlutterLocalNotificationsPlugin().show(
+      int.parse(data['message_index']),
+      data['channel_title'],
+      data['twi_body'],
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          '0',
+          'Chat',
+          'Twilio Chat Channel 0',
+          importance: Importance.high,
+          priority: Priority.high,
+          showWhen: true,
+        ),
+      ),
+      payload: jsonEncode(data),
+    );
   }
 }
 //#endregion

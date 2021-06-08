@@ -5,17 +5,20 @@ class ChatClient {
   /// Stream for the native chat events.
   late StreamSubscription<dynamic> _chatStream;
 
+  /// Stream for native Channel events
+  late StreamSubscription<dynamic> _channelEventStream;
+
   /// Stream for the notification events.
   late StreamSubscription<dynamic> _notificationStream;
 
   //#region Private API properties
-  Channels _channels = Channels();
+  final Channels _channels = Channels();
 
   ConnectionState _connectionState = ConnectionState.UNKNOWN;
 
   final String _myIdentity;
 
-  Users _users = Users();
+  final Users _users = Users();
 
   bool _isReachabilityEnabled = false;
   //#endregion
@@ -195,6 +198,7 @@ class ChatClient {
     onNotificationFailed = _onNotificationFailedCtrl.stream;
 
     _chatStream = TwilioProgrammableChat._chatChannel.receiveBroadcastStream(0).listen(_parseEvents);
+    _channelEventStream = TwilioProgrammableChat._channelEventChannel.receiveBroadcastStream(0).listen(_parseChannelEvents);
     _notificationStream = TwilioProgrammableChat._notificationChannel.receiveBroadcastStream(0).listen(_parseNotificationEvents);
   }
 
@@ -222,6 +226,7 @@ class ChatClient {
     try {
       await Channels._shutdown();
       await _chatStream.cancel();
+      await _channelEventStream.cancel();
       await _notificationStream.cancel();
       TwilioProgrammableChat.chatClient = null;
       return await TwilioProgrammableChat._methodChannel.invokeMethod('ChatClient#shutdown', null);
@@ -236,9 +241,9 @@ class ChatClient {
   ///
   /// Twilio iOS SDK handles receiving messages when app is in the background and displaying
   /// notifications.
-  Future<void> registerForNotification(String token) async {
+  Future<void> registerForNotification(String? token) async {
     try {
-      await TwilioProgrammableChat._methodChannel.invokeMethod('registerForNotification', <String, Object>{'token': token});
+      await TwilioProgrammableChat._methodChannel.invokeMethod('registerForNotification', <String, Object?>{'token': token});
     } on PlatformException catch (err) {
       throw TwilioProgrammableChat._convertException(err);
     }
@@ -487,6 +492,14 @@ class ChatClient {
       default:
         TwilioProgrammableChat._log("Event '$eventName' not yet implemented");
         break;
+    }
+  }
+
+  void _parseChannelEvents(dynamic event) {
+    final data = Map<String, dynamic>.from(event['data']);
+    final String? channelSid = data['channelSid'];
+    if (channelSid != null) {
+      _channels._routeChannelEvent(channelSid, event);
     }
   }
 

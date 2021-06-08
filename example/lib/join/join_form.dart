@@ -113,7 +113,12 @@ class _JoinFormState extends State<JoinForm> {
     try {
       await widget.joinBloc.submit();
       await Navigator.of(context).push(
-        MaterialPageRoute<ChatPage>(fullscreenDialog: true, builder: (BuildContext context) => ChatPage.create(context, widget.joinBloc.model)),
+        MaterialPageRoute<ChatPage>(
+          fullscreenDialog: true,
+          builder: (BuildContext context) {
+            return ChatPage.create(context, widget.joinBloc.model);
+          },
+        ),
       );
     } on PlatformException catch (error) {
       print(error);
