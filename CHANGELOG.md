@@ -1,3 +1,7 @@
+## 0.2.0
+
+* **BREAKING CHANGE**: Added null safety support.
+
 ## 0.1.1+8
 
 * Removed non-null assertions on `friendlyName` and `dateUpdated` in `ChannelDescriptor`.
