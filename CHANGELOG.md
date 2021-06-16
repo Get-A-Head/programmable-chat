@@ -2,6 +2,10 @@
 
 * **BREAKING CHANGE**: Added null safety support.
 
+## 0.1.1+9
+
+* **Android**: Fixed type cast errors parsing the `messageIndex` param for `removeMessage`, `getMessagesBefore`, and `advanceLastConsumedMessageIndexWithResult` at native layer.
+
 ## 0.1.1+8
 
 * Removed non-null assertions on `friendlyName` and `dateUpdated` in `ChannelDescriptor`.
