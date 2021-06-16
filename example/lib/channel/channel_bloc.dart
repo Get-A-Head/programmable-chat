@@ -53,7 +53,7 @@ class ChannelBloc {
   }
 
   Future _subscribeToChannel() async {
-    var uChannel = channel;
+    final uChannel = channel;
     if (uChannel == null) {
       return;
     }
@@ -82,9 +82,9 @@ class ChannelBloc {
   }
 
   Future _getMessages(Channel channel) async {
-    var friendlyName = await channel.getFriendlyName();
-    var messageCount = await channel.getMessagesCount();
-    var messages = await channel.messages.getLastMessages(messageCount);
+    final friendlyName = await channel.getFriendlyName();
+    final messageCount = await channel.getMessagesCount();
+    final messages = await channel.messages.getLastMessages(messageCount);
     messages.where((message) => message.hasMedia).forEach(_getImage);
     _messageSubject.add(_messageSubject.value.copyWith(
       friendlyName: friendlyName,
@@ -94,24 +94,24 @@ class ChannelBloc {
   }
 
   Future _updateLastConsumedMessageIndex(Channel channel, List<Message> messages) async {
-    var lastConsumedMessageIndex = messages.isNotEmpty && messages.last.messageIndex != null ? messages.last.messageIndex : 0;
+    final lastConsumedMessageIndex = messages.isNotEmpty && messages.last.messageIndex != null ? messages.last.messageIndex : 0;
     await channel.messages.setLastConsumedMessageIndexWithResult(lastConsumedMessageIndex!);
   }
 
   Future sendMessage() async {
-    var message = MessageOptions()
+    final message = MessageOptions()
       ..withBody(messageController.text)
       ..withAttributes({'name': myUsername});
     await channel?.messages.sendMessage(message);
   }
 
   Future sendImage() async {
-    var image = await _imagePicker.getImage(source: ImageSource.gallery);
+    final image = await _imagePicker.getImage(source: ImageSource.gallery);
     if (image != null) {
-      var file = File(image.path);
-      var mimeType = mime(image.path);
+      final file = File(image.path);
+      final mimeType = mime(image.path);
       if (mimeType != null) {
-        var message = MessageOptions()
+        final message = MessageOptions()
           ..withMedia(file, mimeType)
           ..withAttributes({'name': myUsername});
         await channel?.messages.sendMessage(message);
@@ -120,7 +120,7 @@ class ChannelBloc {
   }
 
   Future leaveChannel() async {
-    var uChannel = channel;
+    final uChannel = channel;
     if (uChannel == null) {
       return;
     }
@@ -133,23 +133,23 @@ class ChannelBloc {
   }
 
   Future _getImage(Message message) async {
-    var uMessageMedia = message.media;
+    final uMessageMedia = message.media;
     if (uMessageMedia == null) {
       return;
     }
-    var subject = BehaviorSubject<MediaModel>();
+    final subject = BehaviorSubject<MediaModel>();
     subject.add(MediaModel(isLoading: true, message: message));
     mediaSubjects[message.sid] = subject;
 
     if (tempDirPath == null) {
-      var tempDir = await getTemporaryDirectory();
+      final tempDir = await getTemporaryDirectory();
       tempDirPath = tempDir.path;
     }
-    var uFileName = uMessageMedia.fileName;
-    var path = '$tempDirPath/'
+    final uFileName = uMessageMedia.fileName;
+    final path = '$tempDirPath/'
         '${(uFileName != null && uFileName.isNotEmpty) ? uFileName : uMessageMedia.sid}.'
         '${extensionFromMime(uMessageMedia.type)}';
-    var outputFile = File(path);
+    final outputFile = File(path);
 
     await uMessageMedia.download(outputFile);
     subject.add(subject.value.copyWith(isLoading: false, file: outputFile));

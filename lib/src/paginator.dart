@@ -37,7 +37,7 @@ class Paginator<T> {
 
   /// Construct from a map.
   factory Paginator._fromMap(Map<String, dynamic> map) {
-    var paginator = Paginator<T>(map['pageId'], map['pageSize'], map['hasNextPage'], map['itemType']);
+    final paginator = Paginator<T>(map['pageId'], map['pageSize'], map['hasNextPage'], map['itemType']);
     paginator._updateFromMap(map);
     return paginator;
   }

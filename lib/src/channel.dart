@@ -207,7 +207,7 @@ class Channel {
 
   /// Construct from a map.
   factory Channel._fromMap(Map<String, dynamic> map) {
-    var channel = Channel(
+    final channel = Channel(
       map['sid'],
       map['createdBy'],
       map['dateCreated'] != null ? DateTime.parse(map['dateCreated']) : null,

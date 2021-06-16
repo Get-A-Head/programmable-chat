@@ -11,11 +11,12 @@ import 'package:twilio_programmable_chat_example/debug.dart';
 import 'package:twilio_programmable_chat_example/join/join_page.dart';
 import 'package:twilio_programmable_chat_example/shared/services/backend_service.dart';
 
-void main() {
+void main() async {
   Debug.enabled = true;
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp().then((value) => _configureNotifications());
-  SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+  await Firebase.initializeApp();
+  _configureNotifications();
+  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.portraitUp,
@@ -50,7 +51,7 @@ void onMessageOpenedApp(RemoteMessage message) {
 
 Future onBackgroundMessage(RemoteMessage message) async {
   print('Main::FirebaseMessaging.onBackgroundMessage => ${message.data}');
-  var data = Map<String, dynamic>.from(message.data);
+  final data = Map<String, dynamic>.from(message.data);
   if (data['message_index'] != null && data['channel_title'] != null && data['twi_body'] != null) {
     await FlutterLocalNotificationsPlugin().show(
       int.parse(data['message_index']),

@@ -53,7 +53,7 @@ class User {
 
   /// Construct from a map.
   factory User._fromMap(Map<String, dynamic> map) {
-    var user = User(
+    final user = User(
       map['identity'],
       map['attributes'] != null ? Attributes.fromMap(map['attributes'].cast<String, dynamic>()) : Attributes(AttributesType.NULL, null),
     );

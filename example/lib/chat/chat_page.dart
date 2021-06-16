@@ -98,9 +98,9 @@ class _ChatPageState extends State<ChatPage> {
         initialData: ChatModel(isLoading: true),
         stream: widget.chatBloc.channelDescriptorStream,
         builder: (BuildContext context, AsyncSnapshot<ChatModel> snapshot) {
-          var chatModel = snapshot.data ?? ChatModel(isLoading: true);
-          var publicChannels = chatModel.publicChannels.where((publicChannel) => !chatModel.userChannels.any((userChannel) => userChannel.sid == publicChannel.sid)).toList();
-          var channels = [...chatModel.userChannels, ...publicChannels];
+          final chatModel = snapshot.data ?? ChatModel(isLoading: true);
+          final publicChannels = chatModel.publicChannels.where((publicChannel) => !chatModel.userChannels.any((userChannel) => userChannel.sid == publicChannel.sid)).toList();
+          final channels = [...chatModel.userChannels, ...publicChannels];
 
           if (chatModel.isLoading) {
             return _buildProgressIndicator();
@@ -114,7 +114,7 @@ class _ChatPageState extends State<ChatPage> {
                 shrinkWrap: true,
                 itemCount: channels.length,
                 itemBuilder: (BuildContext context, int index) {
-                  var channelDescriptor = channels[index];
+                  final channelDescriptor = channels[index];
                   return _buildChannel(channelDescriptor, widget.chatBloc.channelStatusMap[channelDescriptor.sid] ?? ChannelStatus.UNKNOWN);
                 },
               )
@@ -170,7 +170,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future _showAddChannelDialog() async {
-    var result = await showDialog<Map<String, dynamic>>(
+    final result = await showDialog<Map<String, dynamic>>(
         context: context,
         builder: (context) {
           return AddChannelDialog();
@@ -181,7 +181,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future _joinChannel(ChannelDescriptor channelDescriptor) async {
-    var channel = await channelDescriptor.getChannel();
+    final channel = await channelDescriptor.getChannel();
     if (channel == null) {
       return;
     }
@@ -200,8 +200,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future _editChannel(ChannelDescriptor channelDescriptor) async {
-    var _controller = TextEditingController(text: channelDescriptor.friendlyName);
-    var result = await showDialog<String>(
+    final _controller = TextEditingController(text: channelDescriptor.friendlyName);
+    final result = await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
           return Dialog(

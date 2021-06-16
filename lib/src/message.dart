@@ -117,7 +117,7 @@ class Message {
 
   /// Construct from a map.
   factory Message._fromMap(Map<String, dynamic> map, Messages messages) {
-    var message = Message(
+    final message = Message(
       map['sid'],
       map['author'],
       DateTime.parse(map['dateCreated']),
@@ -138,7 +138,7 @@ class Message {
   //#region Public API methods
   /// Returns the parent channel this message belongs to.
   Future<Channel?> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
+    final channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
     return channel;
   }
 

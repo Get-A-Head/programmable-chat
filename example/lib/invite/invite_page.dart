@@ -47,14 +47,14 @@ class InvitePageState extends State<InvitePage> {
       stream: widget.inviteBloc.inviteStream,
       initialData: InviteModel(),
       builder: (BuildContext context, AsyncSnapshot<InviteModel> snapshot) {
-        var model = snapshot.data ?? InviteModel();
+        final model = snapshot.data ?? InviteModel();
         if (model.isLoading) {
           return Center(child: CircularProgressIndicator());
         } else {
           return ListView.builder(
             itemCount: model.members.length,
             itemBuilder: (BuildContext context, int index) {
-              var member = model.members[index];
+              final member = model.members[index];
               return InkWell(
                 onTap: () => widget.inviteBloc.inviteToChannel(member),
                 child: Padding(

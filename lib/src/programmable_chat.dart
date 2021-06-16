@@ -21,7 +21,7 @@ class TwilioProgrammableChat {
   static ChatClient? chatClient;
 
   static Exception _convertException(PlatformException err) {
-    var code = int.tryParse(err.code);
+    final code = int.tryParse(err.code);
     // If code is an integer, then it is a Twilio ErrorInfo exception.
     if (code != null) {
       return ErrorInfo(int.parse(err.code), err.message, err.details as int);

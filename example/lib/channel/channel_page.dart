@@ -47,7 +47,7 @@ class _ChannelPageState extends State<ChannelPage> {
           stream: widget.channelBloc.messageStream,
           initialData: ChannelModel(),
           builder: (BuildContext context, AsyncSnapshot<ChannelModel> snapshot) {
-            var model = snapshot.data;
+            final model = snapshot.data;
             return Scaffold(
               appBar: AppBar(
                   title: Row(
@@ -123,7 +123,7 @@ class _ChannelPageState extends State<ChannelPage> {
                 stream: widget.channelBloc.typingStream,
                 initialData: null,
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  var data = snapshot.data;
+                  final data = snapshot.data;
                   if (data != null) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -171,7 +171,7 @@ class _ChannelPageState extends State<ChannelPage> {
   }
 
   Widget _buildMessage(Message message) {
-    var currentUserIsAuthor = messageFromMe(message);
+    final currentUserIsAuthor = messageFromMe(message);
     return Padding(
       padding: EdgeInsets.only(
         top: 8.0,
@@ -200,7 +200,7 @@ class _ChannelPageState extends State<ChannelPage> {
                         stream: widget.channelBloc.mediaSubjects[message.sid],
                         initialData: MediaModel(isLoading: true, message: message),
                         builder: (BuildContext context, AsyncSnapshot<MediaModel> snapshot) {
-                          var data = snapshot.data ?? MediaModel(isLoading: true, message: message);
+                          final data = snapshot.data ?? MediaModel(isLoading: true, message: message);
                           // Set height/width on Containers to avoid jank
                           if (data.isLoading) {
                             return Container(
@@ -239,12 +239,12 @@ class _ChannelPageState extends State<ChannelPage> {
   }
 
   bool doesNameExist(Message message) {
-    var uJson = message.attributes.getJSONObject();
+    final uJson = message.attributes.getJSONObject();
     return message.attributes.type == AttributesType.OBJECT && uJson != null && uJson.containsKey('name');
   }
 
   Widget _showImage(File? file) {
-    var uFile = file;
+    final uFile = file;
     if (uFile == null) {
       return Text('file variable is null.');
     }
@@ -256,7 +256,7 @@ class _ChannelPageState extends State<ChannelPage> {
   }
 
   String _formatMessageCreationTime(Message message) {
-    var dateCreated = message.dateCreated;
+    final dateCreated = message.dateCreated;
     if (dateCreated == null) {
       return 'No data for date created.';
     }
@@ -294,7 +294,7 @@ class _ChannelPageState extends State<ChannelPage> {
 
   Future _leaveChannel() async {
     if (widget.channelBloc.channel?.type == ChannelType.PRIVATE && widget.channelBloc.channel?.createdBy == widget.channelBloc.myUsername) {
-      var leavePrivateChannel = await showDialog<bool>(
+      final leavePrivateChannel = await showDialog<bool>(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(

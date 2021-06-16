@@ -21,18 +21,18 @@ class InviteBloc {
   }
 
   Future inviteToChannel(Member member) async {
-    var channel = await channelDescriptor.getChannel();
+    final channel = await channelDescriptor.getChannel();
     await channel?.members.invite(member);
   }
 
   Future _getUsers() async {
     _inviteSubject.add(_inviteSubject.value.copyWith(isLoading: true));
-    var currentChannel = await channelDescriptor.getChannel();
-    var membersOfCurrentChannel = await currentChannel?.members.getMembersList();
+    final currentChannel = await channelDescriptor.getChannel();
+    final membersOfCurrentChannel = await currentChannel?.members.getMembersList();
     if (membersOfCurrentChannel != null) {
-      var memberIdsForCurrentChannel = membersOfCurrentChannel.map((m) => m.identity).toList();
-      var userChannels = await chatClient.channels.getUserChannelsList();
-      var membersMap = await _handlePagination(userChannels, memberIdsForCurrentChannel, {});
+      final memberIdsForCurrentChannel = membersOfCurrentChannel.map((m) => m.identity).toList();
+      final userChannels = await chatClient.channels.getUserChannelsList();
+      final membersMap = await _handlePagination(userChannels, memberIdsForCurrentChannel, {});
 
       _inviteSubject.add(_inviteSubject.value.copyWith(isLoading: false, membersMap: membersMap));
     }
@@ -44,15 +44,15 @@ class InviteBloc {
     Map<String, Member> membersMap,
   ) async {
     for (var channelDescriptor in paginator.items) {
-      var uMembersCount = channelDescriptor.membersCount;
+      final uMembersCount = channelDescriptor.membersCount;
       if (uMembersCount == null || uMembersCount <= 0) {
         continue;
       }
-      var channel = await channelDescriptor.getChannel();
-      var members = await channel?.members.getMembersList();
+      final channel = await channelDescriptor.getChannel();
+      final members = await channel?.members.getMembersList();
       if (members != null) {
         for (var member in members) {
-          var uIdentity = member.identity;
+          final uIdentity = member.identity;
           if (uIdentity != null && uIdentity != myIdentity && !membersIdsForCurrentChannel.contains(uIdentity) && !membersMap.keys.contains(uIdentity)) {
             membersMap[uIdentity] = member;
           }
@@ -61,7 +61,7 @@ class InviteBloc {
     }
 
     if (paginator.hasNextPage) {
-      var nextPage = await paginator.requestNextPage();
+      final nextPage = await paginator.requestNextPage();
       return _handlePagination(nextPage, membersIdsForCurrentChannel, membersMap);
     } else {
       return membersMap;

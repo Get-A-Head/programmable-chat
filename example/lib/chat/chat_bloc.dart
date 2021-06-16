@@ -55,7 +55,7 @@ class ChatBloc {
 
   Future addChannel(String channelName, ChannelType type) async {
     _channelDescriptorController.add(channelDescriptorStream.value.copyWith(isLoading: true));
-    var channel = await chatClient.channels.createChannel(channelName, type);
+    final channel = await chatClient.channels.createChannel(channelName, type);
     if (channel != null) await retrieve();
   }
 
@@ -66,9 +66,6 @@ class ChatBloc {
     await channel.join();
   }
 
-  // Paginator<ChannelDescriptor> publicChannelPaginator;
-  // Paginator<ChannelDescriptor> userChannelPaginator;
-
   Future retrieve() async {
     _channelDescriptorController.add(ChatModel(isLoading: true));
     _channelSubscriptions.forEach((sub) => sub.cancel());
@@ -76,11 +73,11 @@ class ChatBloc {
     unreadMessagesMap.clear();
 
     // TODO: Handle pagination, don't litter
-    var userChannelPaginator = await chatClient.channels.getUserChannelsList();
-    var publicChannelPaginator = await chatClient.channels.getPublicChannelsList();
+    final userChannelPaginator = await chatClient.channels.getUserChannelsList();
+    final publicChannelPaginator = await chatClient.channels.getPublicChannelsList();
 
     for (var channelDescriptor in userChannelPaginator.items) {
-      var channel = await channelDescriptor.getChannel();
+      final channel = await channelDescriptor.getChannel();
       if (channel == null) {
         continue;
       }
@@ -96,7 +93,7 @@ class ChatBloc {
     }
 
     for (var channelDescriptor in publicChannelPaginator.items) {
-      var channel = await channelDescriptor.getChannel();
+      final channel = await channelDescriptor.getChannel();
       if (channel == null) {
         continue;
       }
@@ -130,7 +127,7 @@ class ChatBloc {
   }
 
   Future _updateUnreadMessageCountForChannel(ChannelDescriptor channelDescriptor) async {
-    var userHasJoined = (await channelDescriptor.status) == ChannelStatus.JOINED;
+    final userHasJoined = (await channelDescriptor.status) == ChannelStatus.JOINED;
     if (!userHasJoined) {
       unreadMessagesMap[channelDescriptor.sid] = channelDescriptor.messagesCount;
     } else {
@@ -141,7 +138,7 @@ class ChatBloc {
   Future destroyChannel(ChannelDescriptor channelDescriptor) async {
     try {
       _channelDescriptorController.add(channelDescriptorStream.value.copyWith(isLoading: true));
-      var channel = await channelDescriptor.getChannel();
+      final channel = await channelDescriptor.getChannel();
       if (channel != null) {
         await channel.destroy();
         await retrieve();
@@ -153,7 +150,7 @@ class ChatBloc {
 
   Future updateChannel(ChannelDescriptor channelDescriptor, String name) async {
     _channelDescriptorController.add(channelDescriptorStream.value.copyWith(isLoading: true));
-    var channel = await channelDescriptor.getChannel();
+    final channel = await channelDescriptor.getChannel();
     if (channel != null) {
       await channel.setFriendlyName(name);
       await retrieve();

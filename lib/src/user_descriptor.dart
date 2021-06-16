@@ -55,7 +55,7 @@ class UserDescriptor {
 
   /// Subscribe to the user object.
   Future<User?> subscribe() async {
-    var identity = _identity;
+    final identity = _identity;
     if (identity == null) {
       throw Exception('Cannot subscribe User with identity: $identity.');
     }

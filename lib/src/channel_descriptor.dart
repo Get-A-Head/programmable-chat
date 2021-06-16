@@ -52,7 +52,7 @@ class ChannelDescriptor {
   ///
   /// Since for [ChannelDescriptor]s the status is unknown this function will always return [ChannelStatus.UNKNOWN].
   Future<ChannelStatus?> get status async {
-    var channel = await getChannel();
+    final channel = await getChannel();
     if (channel == null) {
       return null;
     }
@@ -86,7 +86,7 @@ class ChannelDescriptor {
 
   /// Get number of unconsumed messages.
   Future<int?> get unconsumedMessagesCount async {
-    var channel = await getChannel();
+    final channel = await getChannel();
     if (channel == null) {
       return null;
     }
@@ -102,7 +102,7 @@ class ChannelDescriptor {
 
   /// Construct from a map.
   factory ChannelDescriptor._fromMap(Map<String, dynamic> map) {
-    var channelDescriptor = ChannelDescriptor(
+    final channelDescriptor = ChannelDescriptor(
       map['sid'],
       DateTime.parse(map['dateCreated']),
       map['createdBy'],
@@ -114,7 +114,7 @@ class ChannelDescriptor {
   //#region Public API methods
   /// Retrieve a full [Channel] object.
   Future<Channel?> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_sid);
+    final channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_sid);
     return channel;
   }
   //#endregion

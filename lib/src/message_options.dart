@@ -55,7 +55,7 @@ class MessageOptions {
   }) {
     _mediaProgressListenerId = DateTime.now().millisecondsSinceEpoch;
     TwilioProgrammableChat._mediaProgressChannel.receiveBroadcastStream().listen((dynamic event) {
-      var eventData = Map<String, dynamic>.from(event);
+      final eventData = Map<String, dynamic>.from(event);
       if (eventData['mediaProgressListenerId'] == _mediaProgressListenerId) {
         switch (eventData['name']) {
           case 'started':

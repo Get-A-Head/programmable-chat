@@ -11,7 +11,7 @@ class Members {
   //#region Public API methods
   /// Return channel this member list belongs to.
   Future<Channel?> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
+    final channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
     return channel;
   }
 
@@ -20,11 +20,11 @@ class Members {
       'channelSid': _channelSid,
     });
     if (membersListData['membersList'] != null) {
-      var membersListFiltered = membersListData['membersList'].where((m) => m != null);
-      var membersMap = membersListFiltered.map<Member>((m) {
+      final membersListFiltered = membersListData['membersList'].where((m) => m != null);
+      final membersMap = membersListFiltered.map<Member>((m) {
         return Member._fromMap(m.cast<String, dynamic>());
       });
-      var membersList = membersMap.toList();
+      final membersList = membersMap.toList();
       return membersList;
     } else {
       return null;

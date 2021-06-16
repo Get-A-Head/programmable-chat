@@ -204,7 +204,7 @@ class ChatClient {
 
   /// Construct from a map.
   factory ChatClient._fromMap(Map<String, dynamic> map) {
-    var chatClient = ChatClient(map['myIdentity']);
+    final chatClient = ChatClient(map['myIdentity']);
     chatClient._updateFromMap(map);
     return chatClient;
   }
@@ -308,7 +308,7 @@ class ChatClient {
       userMap = Map<String, dynamic>.from(data['user'] as Map<dynamic, dynamic>);
     }
 
-    var channelSid = data['channelSid'] as String?;
+    final channelSid = data['channelSid'] as String?;
 
     dynamic reason;
     if (data['reason'] != null) {
@@ -341,7 +341,7 @@ class ChatClient {
           TwilioProgrammableChat._log("ChatClient => case 'channelDeleted' => channelMap is NULL.");
           return;
         }
-        var channel = Channels._channelsMap[channelMap['sid']];
+        final channel = Channels._channelsMap[channelMap['sid']];
         Channels._channelsMap.remove(channelMap['sid']);
         channel?._updateFromMap(channelMap);
         if (channel != null) {
@@ -386,7 +386,7 @@ class ChatClient {
         }
         break;
       case 'clientSynchronization':
-        var synchronizationStatus = EnumToString.fromString(ChatClientSynchronizationStatus.values, data['synchronizationStatus']);
+        final synchronizationStatus = EnumToString.fromString(ChatClientSynchronizationStatus.values, data['synchronizationStatus']);
         if (synchronizationStatus != null) {
           _onClientSynchronizationCtrl.add(synchronizationStatus);
         } else {
@@ -394,7 +394,7 @@ class ChatClient {
         }
         break;
       case 'connectionStateChange':
-        var connectionState = EnumToString.fromString(ConnectionState.values, data['connectionState']);
+        final connectionState = EnumToString.fromString(ConnectionState.values, data['connectionState']);
         if (connectionState != null) {
           _connectionState = connectionState;
           _onConnectionStateCtrl.add(connectionState);
@@ -417,8 +417,8 @@ class ChatClient {
         }
         break;
       case 'newMessageNotification':
-        var messageSid = data['messageSid'] as String?;
-        var messageIndex = data['messageIndex'] as int?;
+        final messageSid = data['messageSid'] as String?;
+        final messageIndex = data['messageIndex'] as int?;
         if (channelSid != null && messageSid != null && messageIndex != null) {
           _onNewMessageNotificationCtrl.add(NewMessageNotificationEvent(channelSid, messageSid, messageIndex));
         } else {
@@ -453,7 +453,7 @@ class ChatClient {
         users._updateFromMap({
           'subscribedUsers': [userMap]
         });
-        var user = users.getUserById(userMap['identity']);
+        final user = users.getUserById(userMap['identity']);
         if (user != null) {
           _onUserSubscribedCtrl.add(user);
         } else {
@@ -465,7 +465,7 @@ class ChatClient {
           TwilioProgrammableChat._log("ChatClient => case 'userUnsubscribed' => userMap is NULL.");
           return;
         }
-        var user = users.getUserById(userMap['identity']);
+        final user = users.getUserById(userMap['identity']);
         if (user != null) {
           user._updateFromMap(userMap);
           users.subscribedUsers.removeWhere((u) => u.identity == userMap!['identity']);
@@ -482,7 +482,7 @@ class ChatClient {
         users._updateFromMap({
           'subscribedUsers': [userMap]
         });
-        var user = users.getUserById(userMap['identity']);
+        final user = users.getUserById(userMap['identity']);
         if (user != null) {
           _onUserUpdatedCtrl.add(UserUpdatedEvent(user, reason));
         } else {

@@ -13,13 +13,13 @@ class Attributes {
   Attributes(this._type, this._json) : assert((_type == AttributesType.NULL && _json == null) || (_type != AttributesType.NULL && _json != null));
 
   factory Attributes.fromMap(Map<String, dynamic> map) {
-    var type = EnumToString.fromString(AttributesType.values, map['type']) ?? AttributesType.NULL;
-    var json = map['data'];
+    final type = EnumToString.fromString(AttributesType.values, map['type']) ?? AttributesType.NULL;
+    final json = map['data'];
     return Attributes(type, json);
   }
 
   Map<String, dynamic>? getJSONObject() {
-    var json = _json;
+    final json = _json;
     if (type != AttributesType.OBJECT || json == null) {
       return null;
     } else {
@@ -28,7 +28,7 @@ class Attributes {
   }
 
   List<Map<String, dynamic>>? getJSONArray() {
-    var json = _json;
+    final json = _json;
     if (type != AttributesType.ARRAY || json == null) {
       return null;
     } else {
@@ -45,7 +45,7 @@ class Attributes {
   }
 
   num? getNumber() {
-    var json = _json;
+    final json = _json;
     if (type != AttributesType.NUMBER || json == null) {
       return null;
     } else {

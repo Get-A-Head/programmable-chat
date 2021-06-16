@@ -7,7 +7,7 @@ class ChannelModel {
   ChannelModel({this.friendlyName = '', this.messages = const <Message>[]});
 
   ChannelModel addMessage(Message message) {
-    var messageList = <Message>[...messages, message];
+    final messageList = <Message>[...messages, message];
     return copyWith(messages: messageList);
   }
 

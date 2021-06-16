@@ -55,7 +55,7 @@ class Member {
 
   /// Construct from a map.
   factory Member._fromMap(Map<String, dynamic> map) {
-    var member = Member(
+    final member = Member(
       map['sid'],
       EnumToString.fromString(MemberType.values, map['type']),
       map['channelSid'],
@@ -68,7 +68,7 @@ class Member {
   //#region Public API methods
   /// Returns the channel this member belong<s to.
   Future<Channel?> getChannel() async {
-    var channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
+    final channel = await TwilioProgrammableChat.chatClient?.channels.getChannel(_channelSid);
     return channel;
   }
 

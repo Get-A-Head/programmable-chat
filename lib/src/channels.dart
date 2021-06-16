@@ -87,7 +87,7 @@ class Channels {
       final methodData = await TwilioProgrammableChat._methodChannel.invokeMethod('Channels#getMembersByIdentity', {'identity': identity});
       final List<Map<String, dynamic>?> memberMapList = methodData.map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
 
-      var memberList = [];
+      final memberList = [];
       for (final memberMap in memberMapList) {
         if (memberMap != null) {
           memberList.add(Member._fromMap(memberMap));
@@ -114,7 +114,7 @@ class Channels {
       final List<Map<String, dynamic>> subscribedChannelsList = map['subscribedChannels'].map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
       _channelsMap.values.forEach((channel) => channel._setSubscribed(false));
       for (final subscribedChannelMap in subscribedChannelsList) {
-        var sid = subscribedChannelMap['sid'];
+        final sid = subscribedChannelMap['sid'];
         _updateChannelFromMap(subscribedChannelMap);
         _channelsMap[sid]?._setSubscribed(true);
       }
@@ -127,7 +127,7 @@ class Channels {
 
   /// Update individual channel from a map.
   static void _updateChannelFromMap(Map<String, dynamic> channelMap) {
-    var sid = channelMap['sid'];
+    final sid = channelMap['sid'];
     if (sid != null) {
       if (!_channelsMap.containsKey(sid)) {
         _channelsMap[sid] = Channel._fromMap(channelMap);

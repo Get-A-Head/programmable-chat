@@ -24,7 +24,7 @@ class MembersBloc {
     _subscriptions = <StreamSubscription>[];
 
     channelDescriptor.getChannel().then((channel) {
-      var _channel = channel;
+      final _channel = channel;
       if (_channel != null) {
         if (_channel.hasSynchronized) {
           _getMembers();
@@ -50,12 +50,12 @@ class MembersBloc {
   }
 
   Future _getMembers() async {
-    var c = await channelDescriptor.getChannel();
-    var membersList = await c?.members.getMembersList();
+    final channel = await channelDescriptor.getChannel();
+    final membersList = await channel?.members.getMembersList();
     if (membersList != null) {
       for (var member in membersList) {
         final userDescriptor = await member.getUserDescriptor();
-        var sid = member.sid;
+        final sid = member.sid;
         if (sid != null) {
           _userDescriptorMap[sid] = userDescriptor;
         }
@@ -65,10 +65,10 @@ class MembersBloc {
   }
 
   Future _onMemberAdded(Member member) async {
-    var memberData = _membersSubject.value;
-    var userDescriptor = await member.getUserDescriptor();
+    final memberData = _membersSubject.value;
+    final userDescriptor = await member.getUserDescriptor();
     memberData.members.add(member);
-    var sid = member.sid;
+    final sid = member.sid;
     if (sid != null) {
       memberData.userDescriptors[sid] = userDescriptor;
     }
@@ -76,11 +76,11 @@ class MembersBloc {
   }
 
   Future _onMemberUpdated(MemberUpdatedEvent event) async {
-    var memberData = _membersSubject.value;
-    var userDescriptor = await event.member.getUserDescriptor();
-    var memberIndex = memberData.members.indexWhere((m) => m.sid == event.member.sid);
+    final memberData = _membersSubject.value;
+    final userDescriptor = await event.member.getUserDescriptor();
+    final memberIndex = memberData.members.indexWhere((m) => m.sid == event.member.sid);
     memberData.members[memberIndex] = event.member;
-    var sid = event.member.sid;
+    final sid = event.member.sid;
     if (sid != null) {
       memberData.userDescriptors[sid] = userDescriptor;
     }
@@ -88,7 +88,7 @@ class MembersBloc {
   }
 
   void _onMemberDeleted(Member member) {
-    var memberData = _membersSubject.value;
+    final memberData = _membersSubject.value;
     memberData.members.removeWhere((m) => m.sid == member.sid);
     memberData.userDescriptors.remove(member.sid);
     _membersSubject.add(memberData);

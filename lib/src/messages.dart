@@ -50,7 +50,7 @@ class Messages {
       });
       final List<Map<String, dynamic>> messageMapList = methodData.map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
 
-      var messages = <Message>[];
+      final messages = <Message>[];
       for (final messageMap in messageMapList) {
         messages.add(Message._fromMap(messageMap, this));
       }
@@ -70,7 +70,7 @@ class Messages {
       });
       final List<Map<String, dynamic>> messageMapList = methodData.map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
 
-      var messages = <Message>[];
+      final messages = <Message>[];
       for (final messageMap in messageMapList) {
         messages.add(Message._fromMap(messageMap, this));
       }
@@ -89,7 +89,7 @@ class Messages {
       });
       final List<Map<String, dynamic>> messageMapList = methodData.map<Map<String, dynamic>>((r) => Map<String, dynamic>.from(r)).toList();
 
-      var messages = <Message>[];
+      final messages = <Message>[];
       for (final messageMap in messageMapList) {
         messages.add(Message._fromMap(messageMap, this));
       }
